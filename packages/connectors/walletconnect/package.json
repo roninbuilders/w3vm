@@ -1,0 +1,48 @@
+{
+  "name": "w3-evm-walletconnect",
+  "version": "0.0.1",
+  "description": "WalletConnect connector for W3 EVM library",
+  "author": "Glitch-txs",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsup",
+    "upload": "npm run build && npm publish --public"
+  },
+  "dependencies": {
+    "@walletconnect/ethereum-provider": "^2.10.0",
+    "@walletconnect/modal": "^2.6.1"
+  },
+  "peerDependencies": {
+    "typescript": ">=5",
+    "w3-evm": ">=1.2"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "wallet",
+    "eth",
+    "ethereum",
+    "walletconnect",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glitch-txs/w3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  }
+}
