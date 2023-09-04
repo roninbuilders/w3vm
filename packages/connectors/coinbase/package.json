@@ -1,39 +1,34 @@
 {
-  "name": "@w3vm/react",
+  "name": "@w3vm/coinbase",
   "version": "0.0.0",
-  "description": "React Hooks for W3-evm",
+  "description": "Coinbase connector for W3Vm library",
+  "author": "Glitch-txs",
+  "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
+    "watch": "tsc -w",
     "build": "tsup",
-    "up": "npm i w3-evm@latest",
     "upload": "npm run build && npm publish --public"
   },
-  "type": "module",
-  "author": "glitch-txs",
-  "license": "MIT",
   "peerDependencies": {
-    "@types/react": ">=18.2.8",
-    "react": ">=18.2.0",
-    "typescript": ">=5"
+    "@w3vm/core": ">=0",
+    "typescript": "^5.2.2"
   },
   "peerDependenciesMeta": {
-    "@types/react": {
-      "optional": true
-    },
     "typescript": {
       "optional": true
     }
   },
   "keywords": [
     "wallet",
-    "react",
-    "next",
+    "eth",
     "ethereum",
-    "wallets",
+    "coinbase",
     "web3"
   ],
   "repository": {
@@ -47,6 +42,6 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
-    "w3-evm": "^1.2.2"
+    "@coinbase/wallet-sdk": "^3.7.1"
   }
 }

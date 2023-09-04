@@ -1,5 +1,13 @@
 import EthereumProvider, { QrModalOptions } from "@walletconnect/ethereum-provider/dist/types/EthereumProvider"
-import { Chain, Injected, Provider, _clearW3 as clearW3, setW3, _KEY_WALLET as KEY_WALLET, _catchError as catchError } from 'w3-evm'
+import { 
+  Chain, 
+  Injected, 
+  Provider, 
+  _clearW3 as clearW3, 
+  setW3, 
+  _KEY_WALLET as KEY_WALLET, 
+  _catchError as catchError
+} from '@w3vm/core'
 import { setWC } from "../store"
 
 type WalletConnectOptions = {

@@ -20,8 +20,8 @@
     "@walletconnect/modal": "^2.6.1"
   },
   "peerDependencies": {
-    "typescript": ">=5",
-    "w3-evm": ">=1.2"
+    "@w3vm/core": ">=0",
+    "typescript": ">=5"
   },
   "peerDependenciesMeta": {
     "typescript": {
@@ -37,7 +37,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/glitch-txs/w3"
+    "url": "https://github.com/w3vm"
   },
   "publishConfig": {
     "access": "public"
