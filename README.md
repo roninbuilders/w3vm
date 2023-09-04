@@ -22,20 +22,20 @@ Additional packages that can be optionally installed:
 ### Install
 
 ```bash
-npm i w3-evm-react
+npm i @w3vm/react
 ```
 
 ### Install WalletConnect Connector
 
 ```bash
-npm i w3-evm-walletconnect
+npm i @w3vm/walletconnect
 ```
 
 ### Init W3
 
 ```tsx
-import { W3, initW3, Injected } from 'w3-evm-react'
-import { WalletConnect } from 'w3-evm-walletconnect'
+import { W3, initW3, Injected } from '@w3vm/react'
+import { WalletConnect } from '@w3vm/walletconnect'
 
 /* Icons */
 import walletconnect from 'public/walletconnect.svg'
@@ -68,7 +68,7 @@ Create your WalletConnect Project ID at <a href='https://cloud.walletconnect.com
 
 Import the `useConnect` hook and map through the `connectors` array:
 ```tsx
-import { useConnect } from 'w3-evm-react'
+import { useConnect } from '@w3vm/react'
 
 export default function Connect() {
 
@@ -90,7 +90,7 @@ export default function Connect() {
 ### Custom Hooks
 
 ```tsx
-import { getW3Chain, getW3Address, getW3Error } from 'w3-evm-react'
+import { getW3Chain, getW3Address, getW3Error } from '@w3vm/react'
 
 export default function UserInfo(){
   
@@ -113,7 +113,7 @@ export default function UserInfo(){
 ### Use with <a href="https://docs.ethers.org/v6/" target="_blank">ethers.js</a>
 ```tsx
 import { BrowserProvider } from 'ethers'
-import { getW3Provider } from 'w3-evm-react'
+import { getW3Provider } from '@w3vm/react'
 
 export default function useEthersProvider(){
 
@@ -133,7 +133,7 @@ export default function useEthersProvider(){
 ### Use with <a href="https://docs.web3js.org/" target="_blank">Web3.js</a>
 ```tsx
 import Web3 from 'web3'
-import { getW3Provider } from 'w3-evm-react'
+import { getW3Provider } from '@w3vm/react'
 
 export default function useWeb3Provider() {
 
@@ -152,7 +152,7 @@ export default function useWeb3Provider() {
 
 ### Use with <a href="https://viem.sh/" target="_blank">viem</a>
 ```tsx
-import { getW3Provider } from 'w3-evm-react'
+import { getW3Provider } from '@w3vm/react'
 import { createWalletClient, custom } from 'viem'
 import { mainnet } from 'viem/chains'
 
