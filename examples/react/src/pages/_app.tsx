@@ -1,9 +1,9 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { W3, initW3, Injected } from 'w3-evm-react'
+import { W3, initW3, Injected } from '@w3vm/react'
 import walletconnect from 'public/walletconnect.svg'
 import wallet from 'public/wallet.png'
-import { WalletConnect } from 'w3-evm-walletconnect'
+import { WalletConnect } from '@w3vm/walletconnect'
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string
 

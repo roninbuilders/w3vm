@@ -1,4 +1,4 @@
-import { Chain } from "w3-evm-react";
+import { Chain } from "@w3vm/react";
 
 export const bsc: Chain = {
   chainId:'0x38',
