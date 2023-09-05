@@ -22,7 +22,7 @@ export class Coinbase extends Injected {
   private provider?: Provider
   getProvider:()=>Promise<Provider> | Provider | undefined
 
-  constructor({options}:{options: CoinbaseOptions}){
+  constructor(options: CoinbaseOptions){
 
     const {
       appName,
