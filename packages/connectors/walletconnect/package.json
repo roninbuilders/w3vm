@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/walletconnect",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "WalletConnect connector for W3 EVM library",
   "author": "Glitch-txs",
   "license": "MIT",
