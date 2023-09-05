@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Connector, initEIP6963, setW3, _storedWalletExists } from 'w3-evm'
+import { Connector, initEIP6963, setW3, _storedWalletExists } from '@w3vm/core'
 import { KEY_WALLET } from './constants'
 
 let init = 0

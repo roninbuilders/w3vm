@@ -12,11 +12,11 @@ export {
   Injected,
   initEIP6963,
   initW3,
-} from 'w3-evm'
+} from '@w3vm/core'
 
 export type {
   Chain,
   Provider,
   EIP1193Provider,
   ProviderRpcError
-} from 'w3-evm'
+} from '@w3vm/core'
