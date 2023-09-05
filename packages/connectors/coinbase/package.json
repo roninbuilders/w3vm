@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/coinbase",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Coinbase connector for W3Vm library",
   "author": "Glitch-txs",
   "license": "MIT",
