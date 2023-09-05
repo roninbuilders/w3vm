@@ -17,7 +17,7 @@
   },
   "peerDependencies": {
     "@w3vm/core": ">=0",
-    "typescript": "^5.2.2"
+    "typescript": ">=5"
   },
   "peerDependenciesMeta": {
     "typescript": {
