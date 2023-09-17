@@ -65,6 +65,7 @@ export class MetaMask extends Injected {
 
   async disconnect(): Promise<void> {
     setW3.wait('Disconnecting')
+    this.MMSDK?.disconnect()
     clearW3(this.id)
   }
 }
