@@ -4,15 +4,24 @@ import type { AppProps } from 'next/app'
 import { W3, initW3, Injected } from '@w3vm/react'
 import { WalletConnect } from '@w3vm/walletconnect'
 import { Coinbase } from '@w3vm/coinbase'
+import { MetaMask } from '@w3vm/metamask'
 
 import walletconnect from 'public/walletconnect.svg'
 import coinbase from 'public/coinbase.svg'
+import metamask from 'public/metamask.svg'
 import wallet from 'public/wallet.png'
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string
 
 const w3props = initW3({
   connectors: [
+    new MetaMask({
+      dappMetadata:{
+        name: 'MyTestDapp',
+        url: 'mytestdapp.com'
+      },
+      icon: metamask
+    }),
     new Injected({ icon: wallet }), 
     new WalletConnect({ 
       projectId, 
