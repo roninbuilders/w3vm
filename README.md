@@ -17,7 +17,7 @@ The core package of this library supports **injected** *(browser extension)* and
 Additional packages that can be optionally installed:
 - **WalletConnect** v2 connector *(recommended)*
 - **Coinbase SDK** connector
-- **MetaMask SDK** connector *(coming soon)*
+- **MetaMask SDK** connector
 
 ### Install
 
