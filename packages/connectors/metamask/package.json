@@ -1,0 +1,48 @@
+{
+  "name": "@w3vm/metamask",
+  "version": "0.0.0",
+  "description": "MetaMask SDK connector for W3 EVM library",
+  "author": "Glitch-txs",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsup",
+    "up": "npm i @metamask/sdk@latest",
+    "upload": "npm run build && npm publish --public"
+  },
+  "dependencies": {
+    "@metamask/sdk": "^0.6.2"
+  },
+  "peerDependencies": {
+    "@w3vm/core": "^0.0.1",
+    "typescript": ">=5"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "wallet",
+    "eth",
+    "ethereum",
+    "walletconnect",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w3vm"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  }
+}
