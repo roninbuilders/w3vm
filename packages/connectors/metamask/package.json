@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/metamask",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "MetaMask SDK connector for W3 EVM library",
   "author": "Glitch-txs",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "@metamask/sdk": "^0.6.2"
   },
   "peerDependencies": {
-    "@w3vm/core": "^0.0.1",
+    "@w3vm/core": ">=0",
     "typescript": ">=5"
   },
   "peerDependenciesMeta": {
