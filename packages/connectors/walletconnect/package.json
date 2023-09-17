@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/walletconnect",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "WalletConnect connector for W3 EVM library",
   "author": "Glitch-txs",
   "license": "MIT",
@@ -13,11 +13,12 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsup",
+    "up": "npm i @walletconnect/ethereum-provider@latest @walletconnect/modal@latest",
     "upload": "npm run build && npm publish --public"
   },
   "dependencies": {
-    "@walletconnect/ethereum-provider": "^2.10.0",
-    "@walletconnect/modal": "^2.6.1"
+    "@walletconnect/ethereum-provider": "^2.10.1",
+    "@walletconnect/modal": "^2.6.2"
   },
   "peerDependencies": {
     "@w3vm/core": ">=0",
