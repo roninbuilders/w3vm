@@ -18,7 +18,7 @@ export class Injected {
   readonly name:  string
   readonly icon?: any
   
-  getProvider:()=>Promise<Provider> | Provider | undefined
+  getProvider:()=>Promise<Provider| undefined> | Provider | undefined
 
   constructor({ icon, name, id, uuid, getProvider }:InjectedOpts = {}){
     this.uuid = uuid ?? ''

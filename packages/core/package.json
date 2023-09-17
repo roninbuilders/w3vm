@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/core",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "EVM Wallets Library For Decentralized Applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
