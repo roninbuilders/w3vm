@@ -69,6 +69,7 @@ export class Coinbase extends Injected {
   async disconnect(): Promise<void> {
     setW3.wait('Disconnecting')
     const provider = await this.getProvider()
+    if(provider) this.removeEvents(provider)
     //@ts-ignore coinbase provider adds disconnect function
     await provider?.disconnect()
     window?.localStorage.removeItem(KEY_WALLET)
