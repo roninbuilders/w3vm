@@ -1,7 +1,7 @@
 {
   "name": "@w3vm/react",
-  "version": "0.0.2",
-  "description": "React Hooks for W3-evm",
+  "version": "0.0.3",
+  "description": "React Hooks for W3Vm",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "up": "npm i w3-evm@latest",
+    "up": "npm i @w3vm/core@latest",
     "upload": "npm run build && npm publish --public"
   },
   "type": "module",
@@ -47,7 +47,6 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
-    "@w3vm/core": "^0.0.0",
-    "w3-evm": "^1.2.2"
+    "@w3vm/core": "^0.0.1"
   }
 }
