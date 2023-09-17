@@ -6,7 +6,8 @@ import {
   _clearW3 as clearW3, 
   setW3, 
   _KEY_WALLET as KEY_WALLET, 
-  _catchError as catchError
+  _catchError as catchError,
+  getW3
 } from '@w3vm/core'
 import { setWC } from "../store"
 
@@ -64,7 +65,9 @@ export class WalletConnect extends Injected {
     });
 
     provider.on('display_uri', setWC.uri)
-  
+    provider.on('session_event', setWC.sessionEvent)
+    this.addEvents(provider as Provider)
+
     if(provider.session){    
       const connected = await this.setAccountAndChainId(provider as Provider)
       if(connected) {
@@ -112,6 +115,7 @@ export class WalletConnect extends Injected {
     if(connected) {
       setW3.walletProvider(provider as Provider)
       localStorage.setItem(KEY_WALLET,this.id)
+      this.addEvents(provider as Provider)
     }
 
     setW3.wait(undefined)
@@ -120,8 +124,31 @@ export class WalletConnect extends Injected {
   async disconnect() {
     setW3.wait('Disconnecting')
     const provider = await this.getProvider()
-    console.log(provider)
     await provider?.disconnect?.()
     clearW3()
+  }
+
+  protected addEvents(provider: Provider){
+    provider.on("accountsChanged", this.onAccountChange)
+    provider.on("chainChanged",this.onChainChange)
+  }
+
+  protected removeEvents(provider: Provider){
+    provider.removeListener("accountsChanged", this.onAccountChange)
+    provider.removeListener("chainChanged",this.onChainChange)
+  }
+
+  protected onAccountChange = (accounts: string[])=>{
+    if(typeof accounts[0] !== 'undefined'){
+      setW3.address(accounts[0])
+    }else{
+      const walletProvider = getW3.walletProvider()
+      if(walletProvider) this.removeEvents(walletProvider)
+      clearW3()
+    }
+  }
+
+  protected onChainChange = (chainId: string | number)=>{
+    setW3.chainId(Number(chainId))
   }
 }
