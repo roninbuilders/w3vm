@@ -1,11 +1,13 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
+
 import { W3, initW3, Injected } from '@w3vm/react'
+import { WalletConnect } from '@w3vm/walletconnect'
+import { Coinbase } from '@w3vm/coinbase'
+
 import walletconnect from 'public/walletconnect.svg'
 import coinbase from 'public/coinbase.svg'
 import wallet from 'public/wallet.png'
-import { WalletConnect } from '@w3vm/walletconnect'
-import { Coinbase } from '@w3vm/coinbase'
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string
 
