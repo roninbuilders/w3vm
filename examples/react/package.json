@@ -15,7 +15,7 @@
     "@types/react-dom": "18.2.4",
     "@w3vm/coinbase": "^0.0.3",
     "@w3vm/metamask": "^0.0.3",
-    "@w3vm/react": "^0.0.3",
+    "@w3vm/react": "^0.0.4",
     "@w3vm/walletconnect": "^0.0.3",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
