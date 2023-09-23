@@ -1,8 +1,8 @@
 # W3Vm Wallet Connectors Library
 
-<a href="https://w3evm.dev/" target="_blank">Read the Full Documentation</a>
+<a href="https://w3vm-docs.vercel.app/" target="_blank">Read the Full Documentation</a>
 
-<a href="https://test.w3evm.dev/" target="_blank">Example</a>
+<a href="https://w3vm.vercel.app/" target="_blank">Example</a>
 
 # Getting Started
 
@@ -15,7 +15,7 @@ It sets up for you a wallet connection infrastructure with a built-in store and 
 The core package of this library supports **injected** *(browser extension)* and **EIP-6963** compliant wallet.
 
 Additional packages that can be optionally installed:
-- **WalletConnect** v2 connector *(recommended)*
+- **WalletConnect** v2 connector
 - **Coinbase SDK** connector
 - **MetaMask SDK** connector
 
