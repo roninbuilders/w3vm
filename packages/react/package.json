@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/react",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React Hooks for W3Vm",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -47,6 +47,6 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
-    "@w3vm/core": "^0.0.1"
+    "@w3vm/core": "^0.0.2"
   }
 }
