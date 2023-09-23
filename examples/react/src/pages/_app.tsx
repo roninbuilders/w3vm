@@ -15,13 +15,6 @@ const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string
 
 const w3props = initW3({
   connectors: [
-    new MetaMask({
-      dappMetadata:{
-        name: 'MyTestDapp',
-        url: 'mytestdapp.com'
-      },
-      icon: metamask
-    }),
     new Injected({ icon: wallet }), 
     new WalletConnect({ 
       projectId, 
