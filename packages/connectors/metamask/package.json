@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/metamask",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "MetaMask SDK connector for W3 EVM library",
   "author": "Glitch-txs",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "upload": "npm run build && npm publish --public"
   },
   "dependencies": {
-    "@metamask/sdk": "^0.6.2"
+    "@metamask/sdk": "^0.7.1"
   },
   "peerDependencies": {
     "@w3vm/core": ">=0",

@@ -49,13 +49,14 @@ export class MetaMask extends Injected {
     
     this.MMSDK = new (await import('@metamask/sdk')).MetaMaskSDK({
       dappMetadata,
+      injectProvider: false,
       openDeeplink,
       communicationLayerPreference,
       transports,
     })
       
     if(window.localStorage.getItem(KEY_WALLET) === this.id){
-      await new Promise(r => setTimeout(r, 100)) // workaround for error https://github.com/MetaMask/metamask-sdk/issues/350
+      await this.MMSDK.init()
       const connected = await this.setAccountAndChainId(this.MMSDK.getProvider() as Provider)
       if(connected) setW3.walletProvider(this.MMSDK.getProvider() as Provider)
       else window.localStorage.removeItem(KEY_WALLET)
