@@ -8,9 +8,10 @@ export async function switchChain({chain}:{chain: number | Chain}){
     catchError(new Error('While calling switchChain Provider was undefined'))
     return
   }
+  const chainId = typeof chain === 'number' ? chain : (chain as Chain)?.chainId
   await provider.request({
     method: 'wallet_switchEthereumChain',
-    params: [{ chainId: typeof chain === 'number' ? chain : (chain as Chain)?.chainId }],
+    params: [{ chainId: "0x" + chainId.toString(16) }],
   }).catch(async (er: any)=>{
     if(typeof chain !== 'number' && (er.code === 4902 || er?.data?.originalError?.code == 4902)){
         await provider.request({
