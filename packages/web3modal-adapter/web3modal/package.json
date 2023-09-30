@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/web3modal",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Web3Modal adapter",
   "author": "Glitch-txs",
   "license": "MIT",
