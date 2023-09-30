@@ -1,7 +1,7 @@
 import { subW3 } from '@w3vm/core'
 import { ethers } from 'ethers'
 import { get, set, sub } from './store'
-import { formatEther } from 'ethers/lib/utils'
+import { formatEther } from 'ethers/lib/utils.js'
 
 subW3.walletProvider((walletProvider)=>{
   if(!walletProvider) return
