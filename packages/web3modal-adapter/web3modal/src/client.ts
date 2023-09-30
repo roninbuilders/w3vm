@@ -30,9 +30,9 @@ import { subWC } from '@w3vm/walletconnect'
 import type EthereumProvider from "@walletconnect/ethereum-provider"
 
 export type Plugin = {
-  fetchEnsName: ({ address, chainId }: { address: string, chainId: number })=>Promise<string>
-  fetchEnsAvatar: ({ name, chainId }: { name: string, chainId: number })=>Promise<string>
-  fetchBalance: ({ address, chainId, token }: { address: string, chainId: number, token?: string })=>Promise<{ formatted: string, symbol: string }>
+  fetchEnsName: ({ address, chainId }: { address: string, chainId: number })=>Promise<string | null | undefined>
+  fetchEnsAvatar: ({ name, chainId }: { name: string, chainId: number })=>Promise<string | null | undefined>
+  fetchBalance: ({ address, chainId, token }: { address: string, chainId: number, token?: string })=>Promise<{ formatted: string, symbol: string } | null | undefined>
 }
 
 // -- Types ---------------------------------------------------------------------
@@ -56,9 +56,9 @@ export class Web3Modal extends Web3ModalScaffold {
   private hasSyncedConnectedAccount = false
 
   private options: Web3ModalOptions | undefined = undefined
-  private fetchEnsName: ({ address, chainId }: { address: string, chainId: number })=>Promise<string>
-  private fetchEnsAvatar: ({ name, chainId }: { name: string, chainId: number })=>Promise<string>
-  private fetchBalance: ({ address, chainId, token }: { address: string, chainId: number, token?: string })=>Promise<{ formatted: string, symbol: string }>
+  private fetchEnsName: Plugin['fetchEnsName']
+  private fetchEnsAvatar: Plugin['fetchEnsAvatar']
+  private fetchBalance: Plugin['fetchBalance']
 
   public constructor(options: Web3ModalOptions) {
     const { plugin, defaultChain, tokens, chainImages, ...w3mOptions } = options
@@ -285,7 +285,7 @@ export class Web3Modal extends Web3ModalScaffold {
       chainId: chainId,
       token: this.options?.tokens?.[chainId]?.address
     })
-    this.setBalance(balance.formatted, balance.symbol)
+    this.setBalance(balance?.formatted, balance?.symbol)
   }
 
   private syncConnectors(connectors: Connector[]) {
