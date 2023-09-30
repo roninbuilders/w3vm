@@ -2,7 +2,9 @@
 
 <a href="https://w3vm-docs.vercel.app/" target="_blank">Read the Full Documentation</a>
 
-<a href="https://w3vm.vercel.app/" target="_blank">Example</a>
+<a href="https://w3vm.vercel.app/" target="_blank">General Example</a>
+
+<a href="https://w3vm-web3modal.vercel.app/" target="_blank">W3Vm with Web3Modal & Ethers</a>
 
 # Getting Started
 
