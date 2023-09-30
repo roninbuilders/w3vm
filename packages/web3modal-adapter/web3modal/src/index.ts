@@ -1,5 +1,5 @@
 import { initW3, Connector, Chain } from '@w3vm/core'
-import { Plugin, Web3Modal, Web3ModalOptions } from './src/client'
+import { Plugin, Web3Modal, Web3ModalOptions } from './client'
 import { WalletConnect } from '@w3vm/walletconnect';
 
 let modal: Web3Modal;
