@@ -9,7 +9,7 @@ subW3.walletProvider((walletProvider)=>{
   set.provider(provider)
 })
 
-export function createEthers(provider: ethers.providers.Provider){
+export function createEthers(provider?: ethers.providers.Provider){
   return {
     fetchEnsName: async ({ address }: { address: string })=>{
       const _provider = provider ?? get.provider()

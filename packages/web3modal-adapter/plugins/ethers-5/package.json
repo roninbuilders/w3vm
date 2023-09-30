@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/web3modal-ethers-5",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Ethers 5 Plugin for Web3Modal adapter",
   "author": "Glitch-txs",
   "license": "MIT",
