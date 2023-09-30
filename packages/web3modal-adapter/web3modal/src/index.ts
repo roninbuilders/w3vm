@@ -1,4 +1,4 @@
-import { initW3, Connector, Chain } from '@w3vm/core'
+import { initW3, Connector, Chain, Injected } from '@w3vm/core'
 import { Plugin, Web3Modal, Web3ModalOptions } from './client'
 import { WalletConnect } from '@w3vm/walletconnect';
 
@@ -13,8 +13,11 @@ export function createWeb3Modal({
   chains,
   ...w3mOptions
 }:{connectors?: Connector[], defaultChain?: Chain | number, SSR?: Boolean, plugin: Plugin, projectId: string, chains: number[]} & Web3ModalOptions){
-  initW3({
-    connectors:[...connectors, new WalletConnect({ 
+  const w3props = initW3({
+    connectors:[
+      ...connectors,
+      new Injected(),
+      new WalletConnect({ 
       projectId,
       showQrModal: false,
       chains
@@ -24,6 +27,8 @@ export function createWeb3Modal({
   })
   
   modal = new Web3Modal({ plugin, projectId, ...w3mOptions })
+
+  return w3props
 }
 
 export function openModal(){
