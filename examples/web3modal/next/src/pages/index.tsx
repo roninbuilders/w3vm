@@ -1,21 +1,9 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { openModal } from './_app'
-import { W3mAccountButton, W3mButton, W3mConnectButton, W3mNetworkButton } from '@web3modal/scaffold'
+import { openModal } from '@w3vm/web3modal'
 
 const inter = Inter({ subsets: ['latin'] })
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'w3m-connect-button': Pick<W3mConnectButton, 'size' | 'label' | 'loadingLabel'>
-      'w3m-account-button': Pick<W3mAccountButton, 'disabled' | 'balance'>
-      'w3m-button': Pick<W3mButton, 'size' | 'label' | 'loadingLabel' | 'disabled' | 'balance'>
-      'w3m-network-button': Pick<W3mNetworkButton, 'disabled'>
-    }
-  }
-}
 
 export default function Home() {
   return (
@@ -27,8 +15,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <button onClick={openModal} >Opem</button>
-        <w3m-button/>
+        <button onClick={openModal} >Open</button>
       </main>
     </>
   )
