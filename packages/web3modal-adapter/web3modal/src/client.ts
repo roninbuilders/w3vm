@@ -5,13 +5,13 @@ import type {
   ConnectionControllerClient,
   LibraryOptions,
   NetworkControllerClient,
+  PublicStateControllerState,
   Token
 } from '@web3modal/scaffold'
 import { Web3ModalScaffold } from '@web3modal/scaffold'
 import {
   ADD_CHAIN_METHOD,
   NAMESPACE,
-  VERSION,
   WALLET_CHOICE_KEY,
   WALLET_CONNECT_CONNECTOR_ID
 } from './utils/constants'
@@ -40,8 +40,13 @@ export interface Web3ModalClientOptions extends Omit<LibraryOptions, 'defaultCha
   chains?: (Chain | number)[]
   defaultChain?: Chain | number
   chainImages?: Record<number, string>
+  connectorImages?: Record<string, string>
   tokens?: Record<number, Token>
   plugin: Plugin
+}
+// @ts-expect-error: Overriden state type is correct
+interface Web3ModalState extends PublicStateControllerState {
+  selectedNetworkId: number | undefined
 }
 
 export type Web3ModalOptions = Omit<Web3ModalClientOptions, '_sdkVersion'>
@@ -50,13 +55,13 @@ export type Web3ModalOptions = Omit<Web3ModalClientOptions, '_sdkVersion'>
 export class Web3Modal extends Web3ModalScaffold {
   private hasSyncedConnectedAccount = false
 
-  private options: Web3ModalClientOptions | undefined = undefined
+  private options: Web3ModalOptions | undefined = undefined
   private fetchEnsName: ({ address, chainId }: { address: string, chainId: number })=>Promise<string>
   private fetchEnsAvatar: ({ name, chainId }: { name: string, chainId: number })=>Promise<string>
   private fetchBalance: ({ address, chainId, token }: { address: string, chainId: number, token?: string })=>Promise<{ formatted: string, symbol: string }>
 
-  public constructor(options: Web3ModalClientOptions) {
-    const { chains, plugin, defaultChain, tokens, chainImages, _sdkVersion, ...w3mOptions } = options
+  public constructor(options: Web3ModalOptions) {
+    const { plugin, defaultChain, tokens, chainImages, ...w3mOptions } = options
 
     if (!w3mOptions.projectId) {
       throw new Error('web3modal:constructor - projectId is undefined')
@@ -112,12 +117,11 @@ export class Web3Modal extends Web3ModalScaffold {
         await connectW3({ connector, chain })
       },
 
-      connectExternal: async id => {
+      connectExternal: async ({ id }) => {
         const connector = getW3.connectors().find(c => c.id === id)
         if (!connector) {
           throw new Error('connectionControllerClient:connectExternal - connector is undefined')
         }
-
         const chain = caipNetworkIdToNumber(this.getCaipNetwork()?.id)
 
         await connectW3({ connector, chain })
@@ -144,7 +148,8 @@ export class Web3Modal extends Web3ModalScaffold {
       connectionControllerClient,
       defaultChain: getCaipDefaultChain(defaultChain),
       tokens: getCaipTokens(tokens),
-      _sdkVersion: _sdkVersion ?? `html-w3vm-${VERSION}`,
+      //@ts-ignore
+      _sdkVersion: "@w3vm/web3modal@0.0.0",
       ...w3mOptions
     })
 
@@ -153,16 +158,13 @@ export class Web3Modal extends Web3ModalScaffold {
     this.fetchEnsName = plugin.fetchEnsName
     this.fetchEnsAvatar = plugin.fetchEnsAvatar
     this.fetchBalance = plugin.fetchBalance
-
-    this.syncRequestedNetworks(chains, chainImages)
-
+    
+    this.syncRequestedNetworks(chainImages)
     this.syncConnectors(getW3.connectors())
 
     subW3.connectors((connectors) => this.syncConnectors(connectors))
-
     subW3.address(() => this.syncAccount())
-
-    subW3.chainId(() => this.syncNetwork(chainImages))
+    subW3.chainId(() => {this.syncNetwork(chainImages), this.syncAccount()})
   }
 
   // -- Public ------------------------------------------------------------------
@@ -189,16 +191,20 @@ export class Web3Modal extends Web3ModalScaffold {
 
   // -- Private -----------------------------------------------------------------
   private syncRequestedNetworks(
-    chains: Web3ModalClientOptions['chains'],
     chainImages?: Web3ModalClientOptions['chainImages']
   ) {
-    const requestedCaipNetworks = chains?.map(
-      chain =>{
-        const chainId = typeof chain === 'number' ? chain : Number(chain.chainId)
-        const name = typeof chain === 'number' ? "" : chain.chainName
+    const connector = getW3.connectors().find(c => c.id === WALLET_CONNECT_CONNECTOR_ID)
+    //@ts-ignore - options exists on EthereumProvider
+    const OptionalChain = connector?.options.optionalChains ?? []
+    //@ts-ignore - options exists on EthereumProvider
+    const chains = connector?.options.chains ?? []
+    
+    const _chains: number[] = [...OptionalChain, ...chains]
+    const requestedCaipNetworks = _chains?.map(
+      chainId =>{
         return {
           id: `${NAMESPACE}:${chainId}`,
-          name,
+          name: `Chain ${chainId}`,
           imageId: NetworkImageIds[chainId],
           imageUrl: chainImages?.[chainId]
         } as CaipNetwork
@@ -237,7 +243,7 @@ export class Web3Modal extends Web3ModalScaffold {
       const caipChainId: CaipNetworkId = `${NAMESPACE}:${chainId}`
       this.setCaipNetwork({
         id: caipChainId,
-        //name: chain.name,
+        name: "Chain "+ chainId,
         imageId: NetworkImageIds[chainId],
         imageUrl: chainImages?.[chainId]
       })
@@ -284,14 +290,15 @@ export class Web3Modal extends Web3ModalScaffold {
 
   private syncConnectors(connectors: Connector[]) {
     const w3mConnectors = connectors.map(
-      ({ id, name }: {id: string, name: string}) =>
+      ({ id, name, icon }) =>
         ({
           id,
           explorerId: ConnectorExplorerIds[id],
           imageId: ConnectorImageIds[id],
+          imageUrl: icon,
           name: ConnectorNamesMap[id] ?? name,
           type: ConnectorTypesMap[id] ?? 'EXTERNAL'
-        }) as const
+        })
     )
     this.setConnectors(w3mConnectors ?? [])
   }

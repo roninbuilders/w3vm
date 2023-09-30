@@ -1,7 +1,8 @@
 import type { CaipNetwork, CaipNetworkId, Tokens } from '@web3modal/scaffold'
-import type { Web3ModalClientOptions } from '../client.js'
-import { NAMESPACE } from './constants.js'
-import { NetworkImageIds } from './presets.js'
+import type { Web3ModalClientOptions } from '../client'
+import { NAMESPACE } from './constants'
+import { NetworkImageIds } from './presets'
+import { Provider } from '@w3vm/core'
 
 export function getCaipDefaultChain(chain?: Web3ModalClientOptions['defaultChain']) {
   if (!chain) {
@@ -32,4 +33,13 @@ export function getCaipTokens(tokens?: Web3ModalClientOptions['tokens']) {
 
 export function caipNetworkIdToNumber(caipnetworkId?: CaipNetworkId) {
   return caipnetworkId ? Number(caipnetworkId.split(':')[1]) : undefined
+}
+
+export function getDefaultWindowProvider() {
+  if (typeof window === 'undefined') {
+    return undefined
+  }
+  const ethereum = (window as unknown as { ethereum?: Provider }).ethereum
+
+  return ethereum
 }

@@ -1,5 +1,5 @@
 import { CoreHelperUtil } from '@web3modal/scaffold'
-import { NAMESPACE } from './constants.js'
+import { NAMESPACE } from './constants'
 
 // -- Helpers ------------------------------------------------------------------
 const RPC_URL = CoreHelperUtil.getBlockchainApiUrl()
