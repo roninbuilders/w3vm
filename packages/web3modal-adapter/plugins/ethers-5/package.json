@@ -1,0 +1,48 @@
+{
+  "name": "@w3vm/web3modal-ethers-5",
+  "version": "0.0.0",
+  "description": "Ethers 5 Plugin for Web3Modal adapter",
+  "author": "Glitch-txs",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsup",
+    "upload": "npm run build && npm publish --public"
+  },
+  "peerDependencies": {
+    "ethers": "5.7.2",
+    "typescript": ">=5",
+    "@w3vm/core": ">=0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "optionalDependencies": {
+    "typescript": ">=5"
+  },
+  "keywords": [
+    "wallet",
+    "eth",
+    "ethereum",
+    "walletconnect",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w3vm"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  }
+}
