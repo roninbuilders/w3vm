@@ -1,0 +1,94 @@
+# Web3Modal Adapter
+
+You can use [Web3Modal v3](https://docs.walletconnect.com/web3modal/about) with W3Vm.
+
+## Installation
+
+```bash npm2yarn
+npm i @w3vm/react @w3vm/web3modal
+```
+
+## Plugins
+
+Web3Modal Adapter will require a plugin depending on the library you are using.
+
+### Ethers 5.7.2
+
+```bash npm2yarn
+npm i @w3vm/web3modal-ethers-5
+```
+
+### Ethers 6
+
+*Coming soon...*
+
+### Web3js
+
+*Coming soon...*
+
+## Web3Modal & W3Vm in React
+
+Call `createWeb3Modal` function
+
+```tsx
+import '../styles/globals.css'
+import type { AppProps } from 'next/app'
+
+import { createWeb3Modal } from '@w3vm/web3modal'
+import { createEthers } from '@w3vm/web3modal-ethers-5'
+import { W3 } from '@w3vm/react'
+
+const projectId = 'YOUR_PROJECT_ID'
+
+const w3props = createWeb3Modal({ projectId, chains:[1, 137], plugin: createEthers() })
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <W3 {...w3props}/>
+      <Component {...pageProps} />
+    </>
+  )
+}
+```
+
+## Open the Modal
+
+You can open Web3Modal by calling `openModal` function
+
+```tsx
+import { openModal } from '@w3vm/web3modal'
+
+export default function Home() {
+
+  return (
+    <>
+      <button onClick={openModal} >Open</button>
+    </>
+  )
+}
+```
+
+## Use Hooks
+
+You can use any [W3Vm hooks](../react/hooks.mdx#custom-hooks)
+
+```tsx
+import { openModal } from '@w3vm/web3modal'
+import { getW3Chain, getW3Address } from '@w3vm/react'
+
+export default function Home() {
+  const address = getW3Address()
+  const chainId = getW3Chain()
+
+  return (
+    <>
+      <button onClick={openModal} >Open</button>
+
+      address: {address}
+      <br />
+      chain id: {chainId}
+    </>
+  )
+}
+```

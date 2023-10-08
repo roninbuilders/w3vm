@@ -1,0 +1,102 @@
+import { Callout } from 'nextra/components'
+
+# Hooks and Functions
+
+## useConnect Hook
+
+To create a connection component you can use `useConnect` hook. It returns two reactive values: `wait` and `wallets`, and two functions: `connectW3` and `disconnectW3`.
+
+```tsx
+import { useConnect } from '@w3vm/react'
+
+export default function Connect() {
+
+  const { connectors, wait, connectW3, disconnectW3 } = useConnect()
+  
+  return (
+    <>
+      {connectors.map((connector) =>(
+      <button key={connector.id} disabled={Boolean(wait)} onClick={()=>connectW3({ connector })}>
+        <img src={connector.icon} alt={connector.name} />
+        {connector.name}
+      </button>
+      ))}
+    </>
+  )
+}
+```
+
+### Connectors
+
+**Connectors** is an *array* that contains all the **connectors' instances** that we have already initialized. Each connector instance is an object that contains the following **properties**:
+
+- **id**
+  <br/> Unique id of the wallet
+- **name**
+  <br/> The name of the wallet as string
+- **icon**
+  <br/> It can be undefined or the icon you passed when initializing the wallet class, it's also declared automatically for EIP-6963 compatible wallets.
+- **getProvider**
+  <br/> A function that returns the wallet's provider
+
+### wait
+
+A string that shows a current ongoing process:
+
+**Type:**
+
+```ts
+type Wait = 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading' | undefined
+```
+
+### connectW3
+
+It's a function that takes as argument an object with a connector and optionally a chain (3038 compliant chain or number).
+
+```ts
+connectW3({ connector, chain: mainnet })
+```
+
+### disconnectW3
+
+It's a function that doesn't require any arguments and will clear out the user's session state.
+
+Notice there's no actual way of disconnecting an extension wallet from a dapp unless the user disconnects it directly from the extension. This function will clear the session's state in the dapp but the wallet will still be shown as connected on the extension's UI.
+
+<Callout type="info">
+Both `disconnectW3` and `connectW3` functions can be either imported directly from the library or the `useConnect` hook.
+</Callout>
+
+## Custom Hooks
+
+### getW3Address
+
+Will return the current user's address
+
+```ts
+const address: string = getW3Address()
+```
+
+### getW3Chain
+
+Will return the user's current chain id.
+
+```ts
+const chain: number = getW3Chain()
+```
+
+### getW3Error
+
+Will return an error of type ProviderRpcError (following [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)) or Error
+
+```ts
+const error: ProviderRpcError | Error = getW3Error()
+```
+
+### getW3Provider
+
+Will return the provider of the connected wallet or undefined if the user is not connected. You can pass this one down to Web3.js, viem or ethers.js.
+
+```ts
+const w3Provider = getW3Provider()
+```
