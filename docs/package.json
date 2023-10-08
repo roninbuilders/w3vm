@@ -8,5 +8,9 @@
     "nextra-theme-docs": "^2.12.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.8.3",
+    "typescript": "5.2.2"
   }
 }
