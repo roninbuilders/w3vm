@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "engines": {
+    "pnpm": ">=8.6.5"
+  },
+  "scripts": {
+    "build:packages": "pnpm --filter './packages/**' build"
+  }
+}

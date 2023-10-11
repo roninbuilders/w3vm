@@ -13,8 +13,8 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsup",
-    "up": "npm i @walletconnect/ethereum-provider@latest @walletconnect/modal@latest",
-    "upload": "npm run build && npm publish --public"
+    "up": "pnpm add @walletconnect/ethereum-provider@latest @walletconnect/modal@latest",
+    "upload": "pnpm run build && pnpm publish --public"
   },
   "dependencies": {
     "@walletconnect/ethereum-provider": "^2.10.1",
