@@ -9,6 +9,7 @@ node_modules
 
 # production
 **/build
+.turbo
 
 # misc
 .DS_Store

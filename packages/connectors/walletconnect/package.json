@@ -14,7 +14,8 @@
     "watch": "tsc -w",
     "build": "tsup",
     "up": "pnpm add @walletconnect/ethereum-provider@latest @walletconnect/modal@latest",
-    "upload": "pnpm run build && pnpm publish --public"
+    "upload": "pnpm run build && pnpm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "dependencies": {
     "@walletconnect/ethereum-provider": "^2.10.1",
@@ -44,6 +45,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@w3vm/core": "workspace:*",
     "tsup": "^6.7.0"
   }
 }

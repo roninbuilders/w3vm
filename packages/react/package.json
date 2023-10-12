@@ -10,7 +10,8 @@
   "scripts": {
     "build": "tsup",
     "up": "pnpm add @w3vm/core@latest",
-    "upload": "pnpm run build && npm publish --public"
+    "upload": "pnpm run build && npm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "type": "module",
   "author": "glitch-txs",

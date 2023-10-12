@@ -10,7 +10,8 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsup",
-    "upload": "pnpm run build && pnpm publish --public"
+    "upload": "pnpm run build && pnpm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "type": "module",
   "author": "Glitch-txs",

@@ -1,7 +1,10 @@
 {
   "name": "docs",
   "scripts": {
-    "dev": "next dev"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "clean": "rm -rf .next && rm -rf .turbo"
   },
   "dependencies": {
     "next": "^13.5.2",

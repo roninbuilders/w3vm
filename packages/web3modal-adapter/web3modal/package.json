@@ -14,7 +14,8 @@
     "watch": "tsc -w",
     "build": "tsup",
     "up": "pnpm i @w3vm/core@latest @walletconnect/modal@latest",
-    "upload": "pnpm run build && pnpm publish --public"
+    "upload": "pnpm run build && pnpm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "peerDependencies": {
     "typescript": ">=5"
