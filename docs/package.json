@@ -1,6 +1,10 @@
 {
+  "name": "docs",
   "scripts": {
-    "dev": "next dev"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "clean": "rm -rf .next && rm -rf .turbo"
   },
   "dependencies": {
     "next": "^13.5.2",
@@ -8,5 +12,9 @@
     "nextra-theme-docs": "^2.12.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.8.3",
+    "typescript": "5.2.2"
   }
 }

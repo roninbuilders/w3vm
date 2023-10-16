@@ -6,17 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "up": "npm install @w3vm/react@latest"
+    "lint": "next lint"
   },
   "dependencies": {
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",
-    "@w3vm/coinbase": "^0.0.3",
-    "@w3vm/metamask": "^0.0.4",
-    "@w3vm/react": "^0.0.4",
-    "@w3vm/walletconnect": "^0.0.3",
+    "@w3vm/coinbase": "workspace:*",
+    "@w3vm/metamask": "workspace:*",
+    "@w3vm/react": "workspace:*",
+    "@w3vm/walletconnect": "workspace:*",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "next": "13.4.4",

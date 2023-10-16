@@ -13,8 +13,9 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsup",
-    "up": "npm i @w3vm/core@latest @walletconnect/modal@latest",
-    "upload": "npm run build && npm publish --public"
+    "up": "pnpm i @w3vm/core@latest @walletconnect/modal@latest",
+    "upload": "pnpm run build && pnpm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "peerDependencies": {
     "typescript": ">=5"
@@ -45,8 +46,8 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
-    "@w3vm/core": "^0.0.2",
-    "@w3vm/walletconnect": "^0.0.3",
+    "@w3vm/core": "workspace:*",
+    "@w3vm/walletconnect": "workspace:*",
     "@web3modal/scaffold": "^3.0.2"
   }
 }

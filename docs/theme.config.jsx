@@ -1,7 +1,7 @@
 export default {
   logo: <span>W3Vm</span>,
   project: {
-    link: 'https://github.com/w3vm/w3vm-docs'
+    link: 'https://github.com/ronin-builders/w3vm'
   },
   head: (
     <>
