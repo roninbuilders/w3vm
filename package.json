@@ -12,7 +12,7 @@
     "dev": "turbo run dev  --filter=next...",
     "build:docs": "turbo run build --filter=docs",
     "start:docs": "turbo run start --filter=docs",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean --filter=./packages/**"
   },
   "devDependencies": {
     "turbo": "^1.10.15"
