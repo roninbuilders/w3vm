@@ -13,12 +13,13 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsup",
-    "upload": "npm run build && npm publish --public"
+    "upload": "pnpm run build && pnpm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "peerDependencies": {
+    "@w3vm/core": ">=0",
     "ethers": "5.7.2",
-    "typescript": ">=5",
-    "@w3vm/core": ">=0"
+    "typescript": ">=5"
   },
   "peerDependenciesMeta": {
     "typescript": {
@@ -43,6 +44,8 @@
     "access": "public"
   },
   "devDependencies": {
+    "@w3vm/core": "workspace:*",
+    "vanilla-cafe":">=0",
     "tsup": "^6.7.0"
   }
 }

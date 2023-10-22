@@ -9,8 +9,9 @@
   ],
   "scripts": {
     "build": "tsup",
-    "up": "npm i @w3vm/core@latest",
-    "upload": "npm run build && npm publish --public"
+    "up": "pnpm add @w3vm/core@latest",
+    "upload": "pnpm run build && npm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "type": "module",
   "author": "glitch-txs",
@@ -47,6 +48,6 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
-    "@w3vm/core": "^0.0.2"
+    "@w3vm/core": "workspace:*"
   }
 }

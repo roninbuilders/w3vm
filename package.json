@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "engines": {
+    "pnpm": ">=8.6.5"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter=./packages/**",
+    "build:web3modal": "turbo run build  --filter=next...",
+    "start:web3modal": "turbo run start  --filter=next",
+    "dev": "turbo run dev  --filter=next...",
+    "build:docs": "turbo run build --filter=docs",
+    "start:docs": "turbo run start --filter=docs",
+    "clean": "turbo run clean --filter=./packages/**"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.15"
+  }
+}

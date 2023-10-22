@@ -6,20 +6,15 @@
 
 <a href="https://w3vm-web3modal.vercel.app/" target="_blank">W3Vm with Web3Modal & Ethers</a>
 
-# Getting Started
+# Run this repository
 
-W3Vm is an evm wallet connectors library for decentralized applications. It's inspired by <a href="https://github.com/wagmi-dev/references" target="_blank">Wagmi's references</a> with the difference that it's eth-lib agnostic. (Eth-lib for ethereum libraries such as ethers.js, viem or web3.js).<br/>
-It sets up for you a wallet connection infrastructure with a built-in store and React hooks to handle the wallet state and user's sessions.
+```bash
+pnpm install
+```
 
-**Compatible with <a href="https://docs.ethers.org/v6/" target="_blank">ethers.js</a>, <a href="https://viem.sh/" target="_blank">viem</a> and <a href="https://docs.web3js.org/" target="_blank">Web3.js</a>**
-
-### Current supported protocols & wallets
-The core package of this library supports **injected** *(browser extension)* and **EIP-6963** compliant wallet.
-
-Additional packages that can be optionally installed:
-- **WalletConnect** v2 connector
-- **Coinbase SDK** connector
-- **MetaMask SDK** connector
+```ts
+pnpm run build
+```
 
 ### Install
 

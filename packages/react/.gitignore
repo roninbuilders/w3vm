@@ -1,6 +1,0 @@
-# dependencies
-/node_modules
-# local env files
-.env*.local
-#dist folder
-dist

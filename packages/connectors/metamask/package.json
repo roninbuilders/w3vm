@@ -13,8 +13,8 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsup",
-    "up": "npm i @metamask/sdk@latest",
-    "upload": "npm run build && npm publish --public"
+    "upload": "pnpm run build && pnpm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
   },
   "dependencies": {
     "@metamask/sdk": "^0.7.1"

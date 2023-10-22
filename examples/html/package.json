@@ -13,6 +13,6 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
-    "@w3vm/core": "^0.0.0"
+    "@w3vm/core": "workspace:*"
   }
 }
