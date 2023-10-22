@@ -23,6 +23,7 @@
   },
   "peerDependencies": {
     "@w3vm/core": ">=0",
+    "vanilla-cafe":">=0",
     "typescript": ">=5"
   },
   "peerDependenciesMeta": {

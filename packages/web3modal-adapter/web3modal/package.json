@@ -18,6 +18,7 @@
     "clean": "rm -rf .turbo && rm -rf dist"
   },
   "peerDependencies": {
+    "@walletconnect/ethereum-provider": ">=2",
     "typescript": ">=5"
   },
   "peerDependenciesMeta": {

@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@w3vm/core": "workspace:*",
+    "vanilla-cafe":">=0",
     "tsup": "^6.7.0"
   }
 }

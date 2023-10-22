@@ -5,6 +5,7 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/**",
     "build:web3modal": "turbo run build  --filter=next...",
     "start:web3modal": "turbo run start  --filter=next",
