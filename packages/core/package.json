@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "EVM Wallets Library For Decentralized Applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsup",
-    "upload": "pnpm run build && pnpm publish --public",
+    "upload": "pnpm run build && pnpm publish",
     "clean": "rm -rf .turbo && rm -rf dist"
   },
   "type": "module",
