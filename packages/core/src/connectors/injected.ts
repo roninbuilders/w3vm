@@ -85,6 +85,7 @@ export class Injected {
   async disconnect(){
     const walletProvider = getW3.walletProvider()
     if(walletProvider) this.removeEvents(walletProvider)
+    if(walletProvider.disconnect) walletProvider.disconnect()
     clearW3()
   }
 
