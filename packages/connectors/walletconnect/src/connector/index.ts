@@ -1,4 +1,4 @@
-import EthereumProvider, { QrModalOptions } from "@walletconnect/ethereum-provider/dist/types/EthereumProvider"
+import EthereumProvider, { EthereumProviderOptions } from "@walletconnect/ethereum-provider/dist/types/EthereumProvider"
 import { 
   Chain, 
   Injected, 
@@ -13,7 +13,7 @@ import { setWC } from "../store"
 
 type WalletConnectOptions = {
   showQrModal?: boolean,
-  qrModalOptions?: QrModalOptions,
+  qrModalOptions?: EthereumProviderOptions['qrModalOptions'],
   icon?: any,
   projectId: string,
   chains?: number[],
