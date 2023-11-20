@@ -56,7 +56,10 @@ export class WalletConnect extends Injected {
       qrModalOptions,
     }).catch(catchError)
   
-    if(!provider) throw new Error('Failed to initialize WalletConnect - Error not caught')
+    if(!provider){
+      setW3.wait(undefined)
+      throw new Error('Failed to initialize WalletConnect')
+    }
 
     this.provider = provider as Provider
     
@@ -81,17 +84,16 @@ export class WalletConnect extends Injected {
 
   async connect({ chain: _chain }:{chain?: Chain | number} = {}){
     
+    setW3.wait('Connecting')
     const provider = await this.getProvider()
 
     if(!provider){
       function c(this: InstanceType<typeof WalletConnect>){
         this.connect({chain: _chain})
       }
-      window.addEventListener('WalletConnect#ready',c.bind(this) , { once: true })
+      window.addEventListener('WalletConnect#ready', c.bind(this), { once: true })
       return
     }
-    
-    setW3.wait('Connecting')
 
     const { chains: _chains, optionalChains: _opChains } = this.options
     let chain: number | undefined;
