@@ -18,8 +18,8 @@
     "clean": "rm -rf .turbo && rm -rf dist"
   },
   "dependencies": {
-    "@walletconnect/ethereum-provider": "^2.10.4",
-    "@walletconnect/modal": "^2.6.2"
+    "@walletconnect/ethereum-provider": "2.10.6",
+    "@walletconnect/modal": "2.6.2"
   },
   "peerDependencies": {
     "@w3vm/core": ">=0",
