@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/react",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "React Hooks for W3Vm",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
