@@ -46,7 +46,7 @@ export class WalletConnect extends Injected {
     const { EthereumProvider } = await import("@walletconnect/ethereum-provider")
 
     const { showQrModal, qrModalOptions, projectId, chains, optionalChains } = this.options
-    
+
     //@ts-ignore - strict type on chains vs optionalChains
     const provider = await EthereumProvider.init({
       projectId,
@@ -57,7 +57,7 @@ export class WalletConnect extends Injected {
     }).catch(catchError)
   
     if(!provider){
-      setW3.wait(undefined)
+      setW3.status(undefined)
       throw new Error('Failed to initialize WalletConnect')
     }
 
@@ -68,7 +68,7 @@ export class WalletConnect extends Injected {
     });
 
     function onUri(uri: string){
-      if(uri && !provider?.session) setW3.status('Connecting')
+      if(uri) setW3.status('Connecting')
       setWC.uri(uri)
     }
     provider.on('display_uri', onUri)
@@ -79,7 +79,7 @@ export class WalletConnect extends Injected {
       const connected = await this.setAccountAndChainId(provider as Provider)
       if(connected) {
         if(localStorage.getItem(KEY_WALLET) !== this.id) localStorage.setItem(KEY_WALLET, this.id)
-        setW3.walletProvider(provider as Provider), setW3.wait(undefined)
+        setW3.walletProvider(provider as Provider), setW3.status(undefined)
       return
       }
     }
@@ -123,11 +123,11 @@ export class WalletConnect extends Injected {
       this.addEvents(provider as Provider)
     }
 
-    setW3.wait(undefined)
+    setW3.status(undefined)
   }
 
   async disconnect() {
-    setW3.wait('Disconnecting')
+    setW3.status('Disconnecting')
     const provider = await this.getProvider()
     await provider?.disconnect?.()
     clearW3()
