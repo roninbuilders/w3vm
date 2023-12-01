@@ -1,9 +1,10 @@
 import { KEY_WALLET } from "../constants"
-import { getW3 } from "../store/w3store"
+import { getW3, setW3 } from "../store/w3store"
 import { Chain, Connector } from "../types"
 
 /* Connect & Disconnect Functions */
 export async function connectW3({ connector, chain }:{connector: Connector, chain?: Chain | number}): Promise<void>{
+  if(connector.id === "walletConnect") setW3.status('GeneratingURI')
   await connector.connect({ chain })
 }
 

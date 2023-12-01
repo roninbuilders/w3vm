@@ -3,6 +3,6 @@ import { ProviderRpcError } from "../types";
 
 export function catchError(e: Error | ProviderRpcError){
   setW3.error(e) 
-  setW3.wait(undefined)
+  setW3.status(undefined)
   throw e
 }

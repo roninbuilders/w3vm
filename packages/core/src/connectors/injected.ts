@@ -38,7 +38,7 @@ export class Injected {
       const provider = await this.getProvider()
       if(!provider){
         window.localStorage.removeItem(KEY_WALLET)
-        setW3.wait(undefined)
+        setW3.status(undefined)
         return
       }
       const connected = await this.setAccountAndChainId(provider)
@@ -48,16 +48,16 @@ export class Injected {
       }else{
         window?.localStorage.removeItem(KEY_WALLET)
       }
-      setW3.wait(undefined)
+      setW3.status(undefined)
     }
   }
 
   async connect({ chain: _chain }:{chain?: Chain | number} = {}){
-    setW3.wait('Connecting')
+    setW3.status('Connecting')
     const provider = await this.getProvider()
     
     if(!provider){
-      setW3.wait(undefined), catchError(new Error('Provider not found'))
+      setW3.status(undefined), catchError(new Error('Provider not found'))
       return
     }  
     await provider.request<string[]>({ method: 'eth_requestAccounts' })
@@ -79,7 +79,7 @@ export class Injected {
     })
     .catch(catchError)
 
-    setW3.wait(undefined)
+    setW3.status(undefined)
   }
 
   async disconnect(){

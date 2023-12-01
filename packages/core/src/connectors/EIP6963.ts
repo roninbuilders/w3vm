@@ -32,7 +32,7 @@ export class EIP6963Connector extends Injected {
       }else{
         window?.localStorage.removeItem(KEY_WALLET)
       }
-      setW3.wait(undefined)
+      setW3.status(undefined)
     }
   }
 }

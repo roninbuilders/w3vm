@@ -67,11 +67,15 @@ export class WalletConnect extends Injected {
       clearW3(this.id)
     });
 
-    provider.on('display_uri', setWC.uri)
+    function onUri(uri: string){
+      if(uri && !provider?.session) setW3.status('Connecting')
+      setWC.uri(uri)
+    }
+    provider.on('display_uri', onUri)
     provider.on('session_event', setWC.sessionEvent)
     this.addEvents(provider as Provider)
 
-    if(provider.session){    
+    if(provider.session){
       const connected = await this.setAccountAndChainId(provider as Provider)
       if(connected) {
         if(localStorage.getItem(KEY_WALLET) !== this.id) localStorage.setItem(KEY_WALLET, this.id)
@@ -84,7 +88,6 @@ export class WalletConnect extends Injected {
 
   async connect({ chain: _chain }:{chain?: Chain | number} = {}){
     
-    setW3.wait('Connecting')
     const provider = await this.getProvider()
 
     if(!provider){

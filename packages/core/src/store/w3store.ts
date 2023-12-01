@@ -5,7 +5,7 @@ interface W3Store {
   /**
    * Current connection state. Shows if there's an ongoing process.
    */
-  wait?: 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading'
+  status?: 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading' | 'GeneratingURI'
   /**
    * Connected wallet address, undefined if disconnected.
    */
@@ -33,7 +33,7 @@ interface W3Store {
 }
 
 export const { set: setW3, sub: subW3, get: getW3 } = createStore<W3Store>({
-  wait:'Initializing',
+  status:'Initializing',
   address: undefined,
   chainId: undefined,
   defaultChain: undefined,

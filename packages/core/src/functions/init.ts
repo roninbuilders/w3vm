@@ -30,7 +30,7 @@ export function initW3({
   for(let c of connectors) c.init()
   
   if(!localStorage.getItem(KEY_WALLET)){
-    setW3.wait(undefined)
+    setW3.status(undefined)
   }else{
     setTimeout(_storedWalletExists, 1000)  
   }
@@ -39,7 +39,7 @@ export function initW3({
 export const _storedWalletExists = ()=>{
   const selectedWallet = window.localStorage.getItem(KEY_WALLET)
   if(selectedWallet && !getW3.connectors().some(c=>c.id === selectedWallet)){
-    window.localStorage.removeItem(KEY_WALLET), setW3.wait(undefined)
+    window.localStorage.removeItem(KEY_WALLET), setW3.status(undefined)
 
     throw Error(`${selectedWallet} session was saved on storage but the wallet was NOT found`)
   }
