@@ -12,7 +12,7 @@ export function W3({ connectors }:{ connectors?: Connector[] }):null{
       for(let w of connectors) w.init()
       
       if(!localStorage.getItem(KEY_WALLET)){
-        setW3.wait(undefined)
+        setW3.status(undefined)
       }else{
         setTimeout(_storedWalletExists, 1000)
       }
