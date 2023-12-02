@@ -81,12 +81,12 @@ import { useConnect } from '@w3vm/react'
 
 export default function Connect() {
 
-  const { connectors, connectW3, disconnectW3, wait } = useConnect()
+  const { connectors, connectW3, disconnectW3, status } = useConnect()
   
   return (
     <>
       {connectors.map((connector) =>(
-      <button key={connector.id} disabled={Boolean(wait)} onClick={()=>connectW3({ connector })}>
+      <button key={connector.id} disabled={Boolean(status)} onClick={()=>connectW3({ connector })}>
         <img src={connector.icon} alt={connector.name} />
         {connector.name}
       </button>

@@ -4,19 +4,19 @@ import { Callout } from 'nextra/components'
 
 ## useConnect Hook
 
-To create a connection component you can use `useConnect` hook. It returns two reactive values: `wait` and `wallets`, and two functions: `connectW3` and `disconnectW3`.
+To create a connection component you can use `useConnect` hook. It returns two reactive values: `status` and `wallets`, and two functions: `connectW3` and `disconnectW3`.
 
 ```tsx
 import { useConnect } from '@w3vm/react'
 
 export default function Connect() {
 
-  const { connectors, wait, connectW3, disconnectW3 } = useConnect()
+  const { connectors, status, connectW3, disconnectW3 } = useConnect()
   
   return (
     <>
       {connectors.map((connector) =>(
-      <button key={connector.id} disabled={Boolean(wait)} onClick={()=>connectW3({ connector })}>
+      <button key={connector.id} disabled={Boolean(status)} onClick={()=>connectW3({ connector })}>
         <img src={connector.icon} alt={connector.name} />
         {connector.name}
       </button>
@@ -39,14 +39,14 @@ export default function Connect() {
 - **getProvider**
   <br/> A function that returns the wallet's provider
 
-### wait
+### status
 
 A string that shows a current ongoing process:
 
 **Type:**
 
 ```ts
-type Wait = 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading' | undefined
+type Status = 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading' | 'GeneratingURI' | undefined
 ```
 
 ### connectW3

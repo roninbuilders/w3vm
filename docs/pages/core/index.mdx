@@ -70,22 +70,22 @@ connectW3({ connector })
 
 ### Status
 
-`Wait` is a string that shows a current ongoing process
+`status` is a string that shows a current ongoing process
 
 ```ts
 import { subW3 } from '@w3vm/react'
 
-type Wait = 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading' | undefined
+type Status = 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading' | 'GeneratingURI' | undefined
 
-const handler = (status: Wait)=>{
+const handler = (status: Status)=>{
   console.log(status)
 }
 
 //Subscribe
-const unsubscribe = subW3.wait(handler)
+const unsubscribe = subW3.status(handler)
 
 //Get the current value
-const status = getW3.wait()
+const status = getW3.status()
 ```
 
 ### Get
@@ -98,7 +98,7 @@ import { getW3 } from '@w3vm/react'
 const address = getW3.address()
 const chainId = getW3.chainId()
 const error = getW3.error()
-const status = getW3.wait()
+const status = getW3.status()
 ```
 
 ### Subscribe
