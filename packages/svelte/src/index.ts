@@ -14,6 +14,8 @@ export {
   Injected,
   initEIP6963,
   initW3,
+  connectW3,
+  disconnectW3
 } from '@w3vm/core'
 
 export type {
