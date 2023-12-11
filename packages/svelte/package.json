@@ -1,0 +1,47 @@
+{
+  "name": "@w3vm/svelte",
+  "version": "0.0.0",
+  "description": "Svelte readables for W3Vm",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "up": "pnpm add @w3vm/core@latest",
+    "upload": "pnpm run build && npm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
+  },
+  "type": "module",
+  "author": "glitch-txs",
+  "license": "MIT",
+  "peerDependencies": {
+    "svelte": ">=4",
+    "typescript": ">=5",
+    "@w3vm/core": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "wallet",
+    "svelte",
+    "sveltekit",
+    "ethereum",
+    "wallets",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w3vm"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  }
+}
