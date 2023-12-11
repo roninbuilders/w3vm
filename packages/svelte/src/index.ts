@@ -1,8 +1,11 @@
-export { getW3Address } from './readables/getW3Address'
-export { getW3Chain } from './readables/getW3Chain'
-export { getW3Provider } from './readables/getW3Provider'
-export { useConnect } from './readables/useConnect'
-export { getW3Error } from './readables/getW3Error'
+export { 
+  address, 
+  chainId,
+  error,
+  provider,
+  connectors,
+  status
+} from './readables'
 
 export {
   getW3,
