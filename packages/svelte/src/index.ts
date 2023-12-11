@@ -1,8 +1,8 @@
-export { getW3Address } from './hooks/getW3Address'
-export { getW3Chain } from './hooks/getW3Chain'
-export { getW3Provider } from './hooks/getW3Provider'
-export { useConnect } from './hooks/useConnect'
-export { getW3Error } from './hooks/getW3Error'
+export { getW3Address } from './readables/getW3Address'
+export { getW3Chain } from './readables/getW3Chain'
+export { getW3Provider } from './readables/getW3Provider'
+export { useConnect } from './readables/useConnect'
+export { getW3Error } from './readables/getW3Error'
 
 export {
   getW3,
