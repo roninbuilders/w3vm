@@ -1,4 +1,4 @@
-import EthereumProvider, { EthereumProviderOptions } from "@walletconnect/ethereum-provider/dist/types/EthereumProvider"
+import EthereumProvider, { type EthereumProviderOptions } from "@walletconnect/ethereum-provider/dist/types/EthereumProvider"
 import { 
   Chain, 
   Injected, 
@@ -14,10 +14,10 @@ import { setWC } from "../store"
 type WalletConnectOptions = {
   showQrModal?: boolean,
   qrModalOptions?: EthereumProviderOptions['qrModalOptions'],
+  metadata?: EthereumProviderOptions['metadata']
   icon?: any,
   projectId: string,
-  chains?: number[],
-  optionalChains?: number[]
+  chains?: number[]
 }
 
 export class WalletConnect extends Injected {
@@ -45,14 +45,14 @@ export class WalletConnect extends Injected {
   async init(){
     const { EthereumProvider } = await import("@walletconnect/ethereum-provider")
 
-    const { showQrModal, qrModalOptions, projectId, chains, optionalChains } = this.options
+    const { showQrModal, qrModalOptions, projectId, chains: optionalChains, metadata } = this.options
 
     //@ts-ignore - strict type on chains vs optionalChains
     const provider = await EthereumProvider.init({
       projectId,
-      chains,
+      metadata,
       optionalChains,
-      showQrModal:showQrModal ?? false,
+      showQrModal: showQrModal ?? false,
       qrModalOptions,
     }).catch(catchError)
   
@@ -98,22 +98,17 @@ export class WalletConnect extends Injected {
       return
     }
 
-    const { chains: _chains, optionalChains: _opChains } = this.options
-    let chain: number | undefined;
-    let chains = _chains ?? []
-    let optionalChains = _opChains ?? []
+    const { chains } = this.options
+    
+    let optionalChains = chains ?? []
 
     if(_chain){
-      optionalChains = [ ...chains, ...optionalChains ]
-      
-      if(typeof _chain === 'number') chain = _chain
-      else chain = Number(_chain?.chainId)
+      if(typeof _chain === 'number') optionalChains = [_chain, ...optionalChains]
+      else optionalChains = [Number(_chain?.chainId), ...optionalChains]
     }
 
-    await (provider as EthereumProvider).connect?.({
-      chains: chain ? [chain] : _chains,
-      optionalChains: chain ? optionalChains : _opChains,
-    })
+    await (provider as EthereumProvider)
+    .connect?.({ optionalChains })
     .catch(catchError)
     
     const connected = await this.setAccountAndChainId(this.provider)

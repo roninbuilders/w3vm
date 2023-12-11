@@ -186,7 +186,7 @@ importers:
         version: link:../../core
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(typescript@5.1.3)
+        version: 6.7.0(typescript@5.2.2)
 
   packages/core:
     dependencies:
