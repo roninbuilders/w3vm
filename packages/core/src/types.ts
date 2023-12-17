@@ -44,7 +44,7 @@ export type EIP6963AnnounceProviderEvent = {
 }
 
 /* EIP-1193 */
-interface RequestArguments {
+export interface RequestArguments {
   readonly method: string;
   readonly params?: readonly unknown[] | object;
 }
