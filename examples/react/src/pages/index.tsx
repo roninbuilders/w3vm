@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 export default function Home() {
   
-  const { connectors, wait, connectW3, disconnectW3 } = useConnect()
+  const { connectors, status, connectW3, disconnectW3 } = useConnect()
 
   const address = getW3Address()
   const chain = getW3Chain()
@@ -27,8 +27,8 @@ export default function Home() {
           connectors.map((connector) =>
           <button
           key={connector.id} 
-          disabled={Boolean(wait)} 
-          className={[styles.connector, wait && styles.loading].join(' ')} 
+          disabled={Boolean(status)} 
+          className={[styles.connector, status && styles.loading].join(' ')} 
           onClick={()=>connectW3({ connector })}>
             <span>
               <Image width={44} height={44} src={connector.icon} alt='' />
@@ -38,7 +38,7 @@ export default function Home() {
           )}
         </div>
 
-        { wait ? `${wait}...` : (address ? "Connected" : "Connect Your Wallet") }
+        { status ? `${status}...` : (address ? "Connected" : "Connect Your Wallet") }
         <br/>
         <br/>
         User: { address }

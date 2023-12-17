@@ -61,11 +61,11 @@ export class MetaMask extends Injected {
       if(connected) setW3.walletProvider(this.MMSDK.getProvider() as Provider)
       else window.localStorage.removeItem(KEY_WALLET)
     }
-    setW3.wait(undefined)
+    setW3.status(undefined)
   }
 
   async disconnect(): Promise<void> {
-    setW3.wait('Disconnecting')
+    setW3.status('Disconnecting')
     const provider = this.MMSDK?.getProvider() as Provider
     if(provider) this.removeEvents(provider)
     this.MMSDK?.disconnect()

@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/coinbase",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Coinbase connector for W3Vm library",
   "author": "Glitch-txs",
   "license": "MIT",
@@ -43,6 +43,6 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
-    "@coinbase/wallet-sdk": "^3.7.1"
+    "@coinbase/wallet-sdk": "3.7.2"
   }
 }

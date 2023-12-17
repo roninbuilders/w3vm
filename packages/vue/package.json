@@ -1,7 +1,7 @@
 {
   "name": "@w3vm/vue",
   "version": "0.0.0",
-  "description": "Svelte readables for W3Vm",
+  "description": "Vue composables for W3Vm",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
