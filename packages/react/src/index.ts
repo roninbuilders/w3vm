@@ -6,17 +6,17 @@ export { getW3Error } from './hooks/getW3Error'
 export { W3 } from './W3'
 
 export {
-  getW3,
-  setW3,
-  subW3,
-  Injected,
-  initEIP6963,
-  initW3,
+	getW3,
+	setW3,
+	subW3,
+	Injected,
+	initEIP6963,
+	initW3,
 } from '@w3vm/core'
 
 export type {
-  Chain,
-  Provider,
-  EIP1193Provider,
-  ProviderRpcError
+	Chain,
+	Provider,
+	EIP1193Provider,
+	ProviderRpcError,
 } from '@w3vm/core'

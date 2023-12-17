@@ -1,6 +1,12 @@
 <script setup lang="ts">
-  import { address, chainId, connectors, connectW3, disconnectW3, type Injected } from '@w3vm/vue'
-
+  import { 
+    address, 
+    chainId, 
+    connectors, 
+    connectW3, 
+    disconnectW3, 
+    type Injected
+ } from '@w3vm/vue'
 </script>
 
 <template>

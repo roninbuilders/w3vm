@@ -1,3 +1,1 @@
-export {
-  MetaMask
-} from './connector'
+export { MetaMask } from './connector'

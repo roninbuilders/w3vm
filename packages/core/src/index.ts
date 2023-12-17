@@ -1,33 +1,31 @@
 export { getW3, setW3, subW3 } from './store/w3store'
 
 export {
-  Injected,
-  EIP6963Connector
+	Injected,
+	EIP6963Connector,
 } from './connectors'
 
 export {
-  connectW3,
-  disconnectW3,
-  initEIP6963,
-  initW3,
-  switchChain,
-  _storedWalletExists
+	connectW3,
+	disconnectW3,
+	initEIP6963,
+	initW3,
+	switchChain,
+	_storedWalletExists,
 } from './functions'
 
 export type {
-  Chain,
-  Provider,
-  EIP1193Provider,
-  ProviderRpcError,
-  Connector,
-  RequestArguments
+	Chain,
+	Provider,
+	EIP1193Provider,
+	ProviderRpcError,
+	Connector,
+	RequestArguments,
 } from './types'
 
 export {
-  catchError as _catchError,
-  clearW3 as _clearW3
+	catchError as _catchError,
+	clearW3 as _clearW3,
 } from './utils'
 
-export {
-  KEY_WALLET as _KEY_WALLET
-} from './constants'
+export { KEY_WALLET as _KEY_WALLET } from './constants'

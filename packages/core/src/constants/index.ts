@@ -1,1 +1,1 @@
-export const KEY_WALLET="w3:connected_wallet"
+export const KEY_WALLET = 'w3:connected_wallet'

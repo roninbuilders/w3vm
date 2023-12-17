@@ -5,6 +5,7 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "format": "pnpm dlx @biomejs/biome format packages --write",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/**",
     "build:web3modal": "turbo run build  --filter=next...",
@@ -15,6 +16,7 @@
     "clean": "turbo run clean --filter=./packages/**"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.4.1",
     "turbo": "^1.10.15"
   }
 }

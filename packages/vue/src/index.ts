@@ -6,19 +6,19 @@ export { status } from './composables/status'
 export { connectors } from './composables/connectors'
 
 export {
-  getW3,
-  setW3,
-  subW3,
-  Injected,
-  initEIP6963,
-  initW3,
-  connectW3,
-  disconnectW3
+	getW3,
+	setW3,
+	subW3,
+	Injected,
+	initEIP6963,
+	initW3,
+	connectW3,
+	disconnectW3,
 } from '@w3vm/core'
 
 export type {
-  Chain,
-  Provider,
-  EIP1193Provider,
-  ProviderRpcError
+	Chain,
+	Provider,
+	EIP1193Provider,
+	ProviderRpcError,
 } from '@w3vm/core'

@@ -1,158 +1,167 @@
-import { setW3, getW3 } from "../store/w3store"
-import { Chain, Provider } from "../types"
-import { KEY_WALLET } from "../constants"
-import { catchError, clearW3 } from "../utils"
-import { switchChain } from "../functions"
+import { setW3, getW3 } from '../store/w3store'
+import { Chain, Provider } from '../types'
+import { KEY_WALLET } from '../constants'
+import { catchError, clearW3 } from '../utils'
+import { switchChain } from '../functions'
 
 type InjectedOpts = {
-    uuid?: string
-    id?: string
-    name?:  string
-    icon?: any
-    getProvider?: ()=>Promise<Provider> | Provider | undefined
+	uuid?: string
+	id?: string
+	name?: string
+	icon?: any
+	getProvider?: () => Promise<Provider> | Provider | undefined
 }
 
 export class Injected {
-  readonly uuid: string = ''
-  readonly id: string
-  readonly name:  string
-  readonly icon?: any
-  
-  getProvider:()=>Promise<Provider| undefined> | Provider | undefined
+	readonly uuid: string = ''
+	readonly id: string
+	readonly name: string
+	readonly icon?: any
 
-  constructor({ icon, name, id, uuid, getProvider }:InjectedOpts = {}){
-    this.uuid = uuid ?? ''
-    this.id = id ?? 'injected'
-    this.name = name ?? 'Browser Wallet'
-    this.icon = icon
-    this.getProvider = getProvider ?? (()=>{
-      if(typeof window === 'undefined') return
-      return window.ethereum
-    })
-  }
+	getProvider: () => Promise<Provider | undefined> | Provider | undefined
 
-  async init(){
-    if(window.localStorage.getItem(KEY_WALLET) === this.id){
-      // injection delay - https://groups.google.com/a/chromium.org/g/chromium-extensions/c/ib-hi7hPdW8/m/34mFf8rrGQAJ?pli=1
-      await new Promise(r => setTimeout(r, 100))
-      const provider = await this.getProvider()
-      if(!provider){
-        window.localStorage.removeItem(KEY_WALLET)
-        setW3.status(undefined)
-        return
-      }
-      const connected = await this.setAccountAndChainId(provider)
-      if(connected){
-        this.addEvents(provider)
-        setW3.walletProvider(provider)
-      }else{
-        window?.localStorage.removeItem(KEY_WALLET)
-      }
-      setW3.status(undefined)
-    }
-  }
+	constructor({ icon, name, id, uuid, getProvider }: InjectedOpts = {}) {
+		this.uuid = uuid ?? ''
+		this.id = id ?? 'injected'
+		this.name = name ?? 'Browser Wallet'
+		this.icon = icon
+		this.getProvider =
+			getProvider ??
+			(() => {
+				if (typeof window === 'undefined') return
+				return window.ethereum
+			})
+	}
 
-  async connect({ chain: _chain }:{chain?: Chain | number} = {}){
-    setW3.status('Connecting')
-    const provider = await this.getProvider()
-    
-    if(!provider){
-      setW3.status(undefined), catchError(new Error('Provider not found'))
-      return
-    }  
-    await provider.request<string[]>({ method: 'eth_requestAccounts' })
-    .then(async(accounts: string[])=> {
-      /* Once connected */
+	async init() {
+		if (window.localStorage.getItem(KEY_WALLET) === this.id) {
+			// injection delay - https://groups.google.com/a/chromium.org/g/chromium-extensions/c/ib-hi7hPdW8/m/34mFf8rrGQAJ?pli=1
+			await new Promise((r) => setTimeout(r, 100))
+			const provider = await this.getProvider()
+			if (!provider) {
+				window.localStorage.removeItem(KEY_WALLET)
+				setW3.status(undefined)
+				return
+			}
+			const connected = await this.setAccountAndChainId(provider)
+			if (connected) {
+				this.addEvents(provider)
+				setW3.walletProvider(provider)
+			} else {
+				window?.localStorage.removeItem(KEY_WALLET)
+			}
+			setW3.status(undefined)
+		}
+	}
 
-      /* Save to localStorage */
-      window?.localStorage.setItem(KEY_WALLET, this.id)
+	async connect({ chain: _chain }: { chain?: Chain | number } = {}) {
+		setW3.status('Connecting')
+		const provider = await this.getProvider()
 
-      /* Save address, chain and provider - initialize event listeners */
-      setW3.address(accounts[0]), setW3.walletProvider(provider)
-      await this.setChainId(provider), this.addEvents(provider)
-      
-      const defaultChain = getW3.defaultChain()
-      let chain = _chain ?? defaultChain
+		if (!provider) {
+			setW3.status(undefined), catchError(new Error('Provider not found'))
+			return
+		}
+		await provider
+			.request<string[]>({ method: 'eth_requestAccounts' })
+			.then(async (accounts: string[]) => {
+				/* Once connected */
 
-      /* Request to switch to a default chain */
-      if(chain) switchChain({ chain })
-    })
-    .catch(catchError)
+				/* Save to localStorage */
+				window?.localStorage.setItem(KEY_WALLET, this.id)
 
-    setW3.status(undefined)
-  }
+				/* Save address, chain and provider - initialize event listeners */
+				setW3.address(accounts[0]), setW3.walletProvider(provider)
+				await this.setChainId(provider), this.addEvents(provider)
 
-  async disconnect(){
-    const walletProvider = getW3.walletProvider()
-    if(walletProvider) this.removeEvents(walletProvider)
-    if(walletProvider?.disconnect) walletProvider.disconnect()
-    clearW3()
-  }
+				const defaultChain = getW3.defaultChain()
+				let chain = _chain ?? defaultChain
 
-  protected async setAccountAndChainId(provider: Provider | undefined){
-    if(!provider) return
-    let connected: boolean = false
-  
-    await provider.request<string[]>({ method: 'eth_accounts' })
-    .then(async (accounts)=>{
-      if(accounts?.length){
-        setW3.address(accounts[0])
+				/* Request to switch to a default chain */
+				if (chain) switchChain({ chain })
+			})
+			.catch(catchError)
 
-        await provider.request<string | number>({ method: 'eth_chainId' }).then((chainId)=> {
-          setW3.chainId(Number(chainId))
-        }).catch(catchError)
-    
-        connected = true
-  
-      }else{
-        setW3.address(undefined)
-      }
-  
-    }).catch(catchError)
-  
-    return connected
-  }
+		setW3.status(undefined)
+	}
 
-  protected async setChainId(provider: Provider){
-    await provider.request<string | number>({ method: 'eth_chainId' }).then((chainId)=> {
-      setW3.chainId(Number(chainId))
-    }).catch(console.error)
-  }
+	async disconnect() {
+		const walletProvider = getW3.walletProvider()
+		if (walletProvider) this.removeEvents(walletProvider)
+		if (walletProvider?.disconnect) walletProvider.disconnect()
+		clearW3()
+	}
 
-  protected addEvents(provider: Provider){
-    provider.on("accountsChanged", this.onAccountChange)
-    provider.on("chainChanged",this.onChainChange)
-    provider.on('connect',this.onConnect)
-    provider.on('disconnect',this.onDisconnect)
-  }
+	protected async setAccountAndChainId(provider: Provider | undefined) {
+		if (!provider) return
+		let connected: boolean = false
 
-  protected removeEvents(provider: Provider){
-    provider.removeListener("accountsChanged", this.onAccountChange)
-    provider.removeListener("chainChanged",this.onChainChange)
-    provider.removeListener('connect',this.onConnect)
-    provider.removeListener('disconnect',this.onDisconnect)
-  }
+		await provider
+			.request<string[]>({ method: 'eth_accounts' })
+			.then(async (accounts) => {
+				if (accounts?.length) {
+					setW3.address(accounts[0])
 
-  protected onAccountChange = (accounts: string[])=>{
-    if(typeof accounts[0] !== 'undefined'){
-      setW3.address(accounts[0])
-    }else{
-      const walletProvider = getW3.walletProvider()
-      if(walletProvider) this.removeEvents(walletProvider)
-      clearW3()
-    }
-  }
+					await provider
+						.request<string | number>({ method: 'eth_chainId' })
+						.then((chainId) => {
+							setW3.chainId(Number(chainId))
+						})
+						.catch(catchError)
 
-  protected onChainChange = (chainId: string | number)=>{
-    setW3.chainId(Number(chainId))
-  }
+					connected = true
+				} else {
+					setW3.address(undefined)
+				}
+			})
+			.catch(catchError)
 
-  protected onDisconnect = (error: Error)=>{
-    catchError(error)
-  }
+		return connected
+	}
 
-  protected onConnect = async()=>{
-    const provider = await this.getProvider()
-    await this.setAccountAndChainId(provider)
-  }
+	protected async setChainId(provider: Provider) {
+		await provider
+			.request<string | number>({ method: 'eth_chainId' })
+			.then((chainId) => {
+				setW3.chainId(Number(chainId))
+			})
+			.catch(console.error)
+	}
+
+	protected addEvents(provider: Provider) {
+		provider.on('accountsChanged', this.onAccountChange)
+		provider.on('chainChanged', this.onChainChange)
+		provider.on('connect', this.onConnect)
+		provider.on('disconnect', this.onDisconnect)
+	}
+
+	protected removeEvents(provider: Provider) {
+		provider.removeListener('accountsChanged', this.onAccountChange)
+		provider.removeListener('chainChanged', this.onChainChange)
+		provider.removeListener('connect', this.onConnect)
+		provider.removeListener('disconnect', this.onDisconnect)
+	}
+
+	protected onAccountChange = (accounts: string[]) => {
+		if (typeof accounts[0] !== 'undefined') {
+			setW3.address(accounts[0])
+		} else {
+			const walletProvider = getW3.walletProvider()
+			if (walletProvider) this.removeEvents(walletProvider)
+			clearW3()
+		}
+	}
+
+	protected onChainChange = (chainId: string | number) => {
+		setW3.chainId(Number(chainId))
+	}
+
+	protected onDisconnect = (error: Error) => {
+		catchError(error)
+	}
+
+	protected onConnect = async () => {
+		const provider = await this.getProvider()
+		await this.setAccountAndChainId(provider)
+	}
 }
