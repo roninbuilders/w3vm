@@ -6,16 +6,6 @@
 
 <a href="https://w3vm-web3modal.vercel.app/" target="_blank">W3Vm with Web3Modal & Ethers</a>
 
-# Run this repository
-
-```bash
-pnpm install
-```
-
-```ts
-pnpm run build
-```
-
 ### Install
 
 ```bash
