@@ -13,10 +13,13 @@
     "dev": "turbo run dev  --filter=next...",
     "build:docs": "turbo run build --filter=docs",
     "start:docs": "turbo run start --filter=docs",
+    "size": "npm run build && size-limit",
     "clean": "turbo run clean --filter=./packages/**"
   },
   "devDependencies": {
     "@biomejs/biome": "1.4.1",
+    "@size-limit/preset-big-lib": "11.0.2",
+    "size-limit": "11.0.2",
     "turbo": "^1.10.15"
   }
 }

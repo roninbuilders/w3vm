@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Core",
+    "path": "packages/core/dist/index.js",
+    "import" : "*"
+  },
+  {
+    "name": "WalletConnect",
+    "path": "packages/connectors/walletconnect/dist/index.js",
+    "import" : "*"
+  },
+  {
+    "name": "Solid",
+    "path": "packages/solid/dist/index.js",
+    "import" : "*"
+  },
+  {
+    "name": "Svelte",
+    "path": "packages/svelte/dist/index.js",
+    "import" : "*"
+  },
+  {
+    "name": "React",
+    "path": "packages/react/dist/index.js",
+    "import" : "*"
+  },
+  {
+    "name": "Vue",
+    "path": "packages/vue/dist/index.js",
+    "import" : "*"
+  }
+]
