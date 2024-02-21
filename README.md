@@ -112,6 +112,7 @@ export default function useEthersProvider(){
     const provider = new BrowserProvider(w3Provider)
     //...
   }
+  
   //...
 }
 ```
