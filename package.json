@@ -7,6 +7,7 @@
     "preinstall": "npx only-allow pnpm",
     "format": "pnpm dlx @biomejs/biome format packages --write",
     "build": "turbo run build",
+    "build:core": "turbo run build --filter=./packages/core",
     "build:packages": "turbo run build --filter=./packages/**",
     "build:web3modal": "turbo run build  --filter=next...",
     "start:web3modal": "turbo run start  --filter=next",
