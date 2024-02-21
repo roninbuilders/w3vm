@@ -15,4 +15,5 @@ jobs:
       - uses: andresz1/size-limit-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          script: pnpm run size
+          package_manager: pnpm
+          build_script: pnpm run size
