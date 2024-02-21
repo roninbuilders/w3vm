@@ -42,6 +42,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "tsup": "^6.7.0"
+    "tsup": "^6.7.0",
+    "@w3vm/core": "workspace:*"
   }
 }
