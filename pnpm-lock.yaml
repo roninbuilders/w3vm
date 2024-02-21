@@ -162,13 +162,13 @@ importers:
       '@coinbase/wallet-sdk':
         specifier: 3.7.2
         version: 3.7.2
-      '@w3vm/core':
-        specifier: '>=0'
-        version: link:../../core
       typescript:
         specifier: '>=5'
         version: 5.1.3
     devDependencies:
+      '@w3vm/core':
+        specifier: workspace:*
+        version: link:../../core
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.1.3)
@@ -178,13 +178,13 @@ importers:
       '@metamask/sdk':
         specifier: ^0.14.1
         version: 0.14.1(react-native@0.72.5)(react@18.2.0)
-      '@w3vm/core':
-        specifier: '>=0'
-        version: link:../../core
       typescript:
         specifier: '>=5'
         version: 5.1.3
     devDependencies:
+      '@w3vm/core':
+        specifier: workspace:*
+        version: link:../../core
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.1.3)
