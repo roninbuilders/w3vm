@@ -12,9 +12,9 @@ jobs:
       CI_JOB_NUMBER: 1
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
         with:
-          version: 6.32.9
+          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
