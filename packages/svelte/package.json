@@ -1,48 +1,59 @@
 {
   "name": "@w3vm/svelte",
-  "version": "0.0.3",
-  "description": "Svelte readables for W3Vm",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "up": "pnpm add @w3vm/core@latest",
-    "upload": "pnpm run build && npm publish --public",
-    "clean": "rm -rf .turbo && rm -rf dist"
-  },
-  "type": "module",
+  "version": "1.0.0",
+  "description": "Svelte runes for W3Vm",
   "author": "glitch-txs",
   "license": "MIT",
-  "peerDependencies": {
-    "svelte": ">=4",
-    "typescript": ">=5",
-    "@w3vm/core": "workspace:*"
+	"scripts": {
+		"dev": "vite dev",
+		"build": "npm run prepack",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"prepack": "svelte-kit sync && svelte-package && publint",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "upload": "pnpm run build && npm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
+	},
+	"files": [
+		"dist"
+	],
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		}
+	},
+	"peerDependencies": {
+    "@w3vm/core": "workspace:*",
+		"svelte": "^5.0.0"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^6.0.0",
+		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/package": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"publint": "^0.3.2",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
+		"typescript": "^5.0.0",
+		"vite": "^6.2.6"
+	},
+  "publishConfig": {
+    "access": "public"
   },
-  "peerDependenciesMeta": {
-    "typescript": {
-      "optional": true
-    }
-  },
-  "keywords": [
-    "wallet",
-    "svelte",
-    "sveltekit",
-    "ethereum",
-    "wallets",
-    "web3"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/w3vm"
   },
-  "publishConfig": {
-    "access": "public"
-  },
-  "devDependencies": {
-    "tsup": "^6.7.0",
-    "@w3vm/core": "workspace:*"
-  }
+	"keywords": [
+		"svelte",
+    "sveltekit",
+    "ethereum",
+    "wallets",
+    "web3"
+	]
 }
