@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/svelte",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Svelte runes for W3Vm",
   "author": "glitch-txs",
   "license": "MIT",
@@ -18,13 +18,13 @@
 	"files": [
 		"dist"
 	],
-	"svelte": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"svelte": "./dist/index.svelte.js",
+	"types": "./dist/index.svelte.d.ts",
 	"type": "module",
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js"
+			"types": "./dist/index.svelte.d.ts",
+			"svelte": "./dist/index.svelte.js"
 		}
 	},
 	"peerDependencies": {
