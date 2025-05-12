@@ -6,12 +6,11 @@ import {
 	Injected,
 	Provider,
 	_clearW3 as clearW3,
-	setW3,
+	w3vmStore,
 	_KEY_WALLET as KEY_WALLET,
 	_catchError as catchError,
-	getW3,
 } from '@w3vm/core'
-import { setWC } from '../store'
+import { wcStore } from '../store'
 
 type WalletConnectOptions = {
 	showQrModal?: boolean
@@ -59,7 +58,7 @@ export class WalletConnect extends Injected {
 		}).catch(catchError)
 
 		if (!provider) {
-			setW3.status(undefined)
+			w3vmStore.set('status', undefined)
 			throw new Error('Failed to initialize WalletConnect')
 		}
 
@@ -70,18 +69,28 @@ export class WalletConnect extends Injected {
 		})
 
 		function onUri(uri: string) {
-			if (uri) setW3.status('Connecting')
-			setWC.uri(uri)
+			if (uri) w3vmStore.set('status', 'Connecting')
+				wcStore.set('uri', uri)
 		}
+
+		function onSessionEvent(event: unknown){
+			wcStore.set('sessionEvent', event)
+		}
+
+		/**clean up before subscribing... */
+		provider.off('display_uri', onUri)
+		provider.off('session_event', onSessionEvent)
+		this.removeEvents(provider as Provider)
+
 		provider.on('display_uri', onUri)
-		provider.on('session_event', setWC.sessionEvent)
+		provider.on('session_event', onSessionEvent)
 		this.addEvents(provider as Provider)
 
 		if (provider.session) {
 			const connected = await this.setAccountAndChainId(provider as Provider)
 			if (connected) {
 				if (localStorage.getItem(KEY_WALLET) !== this.id) localStorage.setItem(KEY_WALLET, this.id)
-				setW3.walletProvider(provider as Provider), setW3.status(undefined)
+				w3vmStore.set('walletProvider', provider as Provider), w3vmStore.set('status', undefined)
 				return
 			}
 		}
@@ -112,16 +121,16 @@ export class WalletConnect extends Injected {
 
 		const connected = await this.setAccountAndChainId(this.provider)
 		if (connected) {
-			setW3.walletProvider(provider as Provider)
+			w3vmStore.set('walletProvider', provider as Provider)
 			localStorage.setItem(KEY_WALLET, this.id)
 			this.addEvents(provider as Provider)
 		}
 
-		setW3.status(undefined)
+		w3vmStore.set('status', undefined)
 	}
 
 	async disconnect() {
-		setW3.status('Disconnecting')
+		w3vmStore.set('status', 'Disconnecting')
 		const provider = await this.getProvider()
 		await provider?.disconnect?.()
 		clearW3()
@@ -139,15 +148,15 @@ export class WalletConnect extends Injected {
 
 	protected onAccountChange = (accounts: string[]) => {
 		if (typeof accounts[0] !== 'undefined') {
-			setW3.address(accounts[0])
+			w3vmStore.set('address', accounts[0])
 		} else {
-			const walletProvider = getW3.walletProvider()
+			const walletProvider = w3vmStore.get('walletProvider')
 			if (walletProvider) this.removeEvents(walletProvider)
 			clearW3()
 		}
 	}
 
 	protected onChainChange = (chainId: string | number) => {
-		setW3.chainId(Number(chainId))
+		w3vmStore.set('chainId', Number(chainId))
 	}
 }

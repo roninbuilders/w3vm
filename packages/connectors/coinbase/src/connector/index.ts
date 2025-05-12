@@ -1,4 +1,4 @@
-import { Injected, Provider, _clearW3 as clearW3, setW3, _KEY_WALLET as KEY_WALLET } from '@w3vm/core'
+import { Injected, Provider, _clearW3 as clearW3, w3vmStore, _KEY_WALLET as KEY_WALLET } from '@w3vm/core'
 
 type CoinbaseOptions = {
 	appName: string
@@ -51,7 +51,7 @@ export class Coinbase extends Injected {
 	}
 
 	async disconnect(): Promise<void> {
-		setW3.status('Disconnecting')
+		w3vmStore.set('status', 'Disconnecting')
 		const provider = await this.getProvider()
 		if (provider) this.removeEvents(provider)
 		//@ts-ignore coinbase provider adds disconnect function

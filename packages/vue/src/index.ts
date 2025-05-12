@@ -6,9 +6,7 @@ export { status } from './composables/status'
 export { connectors } from './composables/connectors'
 
 export {
-	getW3,
-	setW3,
-	subW3,
+	w3vmStore,
 	Injected,
 	initEIP6963,
 	initW3,

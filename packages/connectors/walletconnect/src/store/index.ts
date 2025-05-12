@@ -1,4 +1,4 @@
-import { createStore } from 'vanilla-cafe'
+import { Store } from 'memomap'
 
 interface WalletConnectStore {
 	/**
@@ -11,11 +11,7 @@ interface WalletConnectStore {
 	sessionEvent: unknown
 }
 
-export const {
-	set: setWC,
-	sub: subWC,
-	get: getWC,
-} = createStore<WalletConnectStore>({
+export const wcStore = new Store<WalletConnectStore>({
 	uri: '',
 	sessionEvent: undefined,
 })

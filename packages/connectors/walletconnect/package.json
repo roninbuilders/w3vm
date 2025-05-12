@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/walletconnect",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "WalletConnect connector for W3 EVM library",
   "author": "Glitch-txs",
   "license": "MIT",
@@ -18,13 +18,13 @@
     "clean": "rm -rf .turbo && rm -rf dist"
   },
   "dependencies": {
-    "@walletconnect/ethereum-provider": "2.18.0",
-    "@walletconnect/modal": "2.7.0"
+    "@walletconnect/ethereum-provider": "2.20.2",
+    "@walletconnect/modal": "2.7.0",
+    "memomap": "^0.0.3"
   },
   "peerDependencies": {
     "@w3vm/core": ">=0",
-    "typescript": ">=5",
-    "vanilla-cafe": ">=0"
+    "typescript": ">=5"
   },
   "peerDependenciesMeta": {
     "typescript": {

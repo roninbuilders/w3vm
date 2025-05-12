@@ -6,9 +6,7 @@ export { getW3Error } from './hooks/getW3Error'
 export { W3 } from './W3'
 
 export {
-	getW3,
-	setW3,
-	subW3,
+	w3vmStore,
 	Injected,
 	initEIP6963,
 	initW3,

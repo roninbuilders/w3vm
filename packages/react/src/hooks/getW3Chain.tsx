@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
-import { subW3, getW3 } from '@w3vm/core'
+import { w3vmStore } from '@w3vm/core'
 
 export function getW3Chain() {
-	return useSyncExternalStore(subW3.chainId, getW3.chainId, getW3.chainId)
+	return useSyncExternalStore((callback)=> w3vmStore.subscribe('chainId', callback), ()=> w3vmStore.get('chainId'), ()=> w3vmStore.get('chainId'))
 }

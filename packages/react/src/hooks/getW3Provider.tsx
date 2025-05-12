@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
-import { subW3, getW3 } from '@w3vm/core'
+import { w3vmStore } from '@w3vm/core'
 
 export function getW3Provider() {
-	return useSyncExternalStore(subW3.walletProvider, getW3.walletProvider, getW3.walletProvider)
+	return useSyncExternalStore((callback)=> w3vmStore.subscribe('walletProvider', callback), ()=> w3vmStore.get('walletProvider'), ()=> w3vmStore.get('walletProvider'))
 }

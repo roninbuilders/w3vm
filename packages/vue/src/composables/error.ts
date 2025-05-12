@@ -1,10 +1,10 @@
 import { ref } from 'vue'
-import { subW3, getW3, type ProviderRpcError } from '@w3vm/core'
+import { w3vmStore, type ProviderRpcError } from '@w3vm/core'
 
-export const error = ref<Error | ProviderRpcError | undefined>(getW3.error())
+export const error = ref<Error | ProviderRpcError | undefined>(w3vmStore.get('error'))
 
 function onError(_error: Error | ProviderRpcError | undefined) {
 	error.value = _error
 }
 
-subW3.error(onError)
+w3vmStore.subscribe('error', onError)

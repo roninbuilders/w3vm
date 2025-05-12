@@ -1,10 +1,10 @@
 import { ref } from 'vue'
-import { subW3, getW3, type Provider } from '@w3vm/core'
+import { w3vmStore, type Provider } from '@w3vm/core'
 
-export const walletProvider = ref<Provider | undefined>(getW3.walletProvider())
+export const walletProvider = ref<Provider | undefined>(w3vmStore.get('walletProvider'))
 
 function onWalletProvider(_provider: Provider | undefined) {
 	walletProvider.value = _provider
 }
 
-subW3.walletProvider(onWalletProvider)
+w3vmStore.subscribe('walletProvider', onWalletProvider)

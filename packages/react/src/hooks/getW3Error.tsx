@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
-import { subW3, getW3 } from '@w3vm/core'
+import { w3vmStore } from '@w3vm/core'
 
 export function getW3Error() {
-	return useSyncExternalStore(subW3.error, getW3.error, getW3.error)
+	return useSyncExternalStore((callback)=> w3vmStore.subscribe('error', callback), ()=> w3vmStore.get('error'), ()=> w3vmStore.get('error'))
 }

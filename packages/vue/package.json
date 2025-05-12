@@ -1,6 +1,6 @@
 {
   "name": "@w3vm/vue",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Vue composables for W3Vm",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

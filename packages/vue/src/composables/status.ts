@@ -1,12 +1,12 @@
 import { ref } from 'vue'
-import { subW3, getW3 } from '@w3vm/core'
+import { w3vmStore } from '@w3vm/core'
 
 type Status = 'Initializing' | 'Connecting' | 'Disconnecting' | 'Loading' | 'GeneratingURI' | undefined
 
-export const status = ref<Status>(getW3.status())
+export const status = ref<Status>(w3vmStore.get('status'))
 
 function onStatus(_provider: Status) {
 	status.value = _provider
 }
 
-subW3.status(onStatus)
+w3vmStore.subscribe('status', onStatus)
