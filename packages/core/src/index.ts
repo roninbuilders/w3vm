@@ -1,4 +1,4 @@
-export { getW3, setW3, subW3 } from './store/w3store'
+export { w3vmStore } from './store/w3store'
 
 export {
 	Injected,

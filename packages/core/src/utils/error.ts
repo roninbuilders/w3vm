@@ -1,8 +1,8 @@
-import { setW3 } from '../store/w3store'
+import { w3vmStore } from '../store/w3store'
 import { ProviderRpcError } from '../types'
 
 export function catchError(e: Error | ProviderRpcError) {
-	setW3.error(e)
-	setW3.status(undefined)
+	w3vmStore.set('error', e)
+	w3vmStore.set('status', undefined)
 	throw e
 }

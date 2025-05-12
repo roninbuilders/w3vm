@@ -16,9 +16,6 @@
   "type": "module",
   "author": "Glitch-txs",
   "license": "MIT",
-  "dependencies": {
-    "vanilla-cafe": "^0.1.5"
-  },
   "peerDependencies": {
     "typescript": ">=5"
   },
@@ -43,5 +40,8 @@
   },
   "devDependencies": {
     "tsup": "^6.7.0"
+  },
+  "dependencies": {
+    "memomap": "^0.0.3"
   }
 }

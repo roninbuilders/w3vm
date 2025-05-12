@@ -1,9 +1,9 @@
-import { getW3 } from '../store/w3store'
+import { w3vmStore } from '../store/w3store'
 import { Chain } from '../types'
 import { catchError } from '../utils'
 
 export async function switchChain({ chain }: { chain: number | Chain }) {
-	const provider = getW3.walletProvider()
+	const provider = w3vmStore.get('walletProvider')
 	if (!provider) {
 		catchError(new Error('While calling switchChain Provider was undefined'))
 		return

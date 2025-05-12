@@ -1,8 +1,8 @@
-import { setW3, getW3 } from '../store/w3store'
 import { Chain, Provider } from '../types'
 import { KEY_WALLET } from '../constants'
 import { catchError, clearW3 } from '../utils'
 import { switchChain } from '../functions'
+import { w3vmStore } from '../store/w3store'
 
 type InjectedOpts = {
 	uuid?: string
@@ -40,26 +40,26 @@ export class Injected {
 			const provider = await this.getProvider()
 			if (!provider) {
 				window.localStorage.removeItem(KEY_WALLET)
-				setW3.status(undefined)
+				w3vmStore.set('status', undefined)
 				return
 			}
 			const connected = await this.setAccountAndChainId(provider)
 			if (connected) {
 				this.addEvents(provider)
-				setW3.walletProvider(provider)
+				w3vmStore.set( 'walletProvider', provider)
 			} else {
 				window?.localStorage.removeItem(KEY_WALLET)
 			}
-			setW3.status(undefined)
+			w3vmStore.set('status', undefined)
 		}
 	}
 
 	async connect({ chain: _chain }: { chain?: Chain | number } = {}) {
-		setW3.status('Connecting')
+		w3vmStore.set('status', 'Connecting')
 		const provider = await this.getProvider()
 
 		if (!provider) {
-			setW3.status(undefined), catchError(new Error('Provider not found'))
+			w3vmStore.set('status', undefined), catchError(new Error('Provider not found'))
 			return
 		}
 		await provider
@@ -71,10 +71,10 @@ export class Injected {
 				window?.localStorage.setItem(KEY_WALLET, this.id)
 
 				/* Save address, chain and provider - initialize event listeners */
-				setW3.address(accounts[0]), setW3.walletProvider(provider)
+				w3vmStore.set('address', accounts[0]), w3vmStore.set( 'walletProvider', provider)
 				await this.setChainId(provider), this.addEvents(provider)
 
-				const defaultChain = getW3.defaultChain()
+				const defaultChain = w3vmStore.get('defaultChain')
 				let chain = _chain ?? defaultChain
 
 				/* Request to switch to a default chain */
@@ -82,11 +82,11 @@ export class Injected {
 			})
 			.catch(catchError)
 
-		setW3.status(undefined)
+		w3vmStore.set('status', undefined)
 	}
 
 	async disconnect() {
-		const walletProvider = getW3.walletProvider()
+		const walletProvider = w3vmStore.get('walletProvider')
 		if (walletProvider) this.removeEvents(walletProvider)
 		if (walletProvider?.disconnect) walletProvider.disconnect()
 		clearW3()
@@ -100,18 +100,18 @@ export class Injected {
 			.request<string[]>({ method: 'eth_accounts' })
 			.then(async (accounts) => {
 				if (accounts?.length) {
-					setW3.address(accounts[0])
+					w3vmStore.set('address', accounts[0])
 
 					await provider
 						.request<string | number>({ method: 'eth_chainId' })
 						.then((chainId) => {
-							setW3.chainId(Number(chainId))
+							w3vmStore.set('chainId', Number(chainId))
 						})
 						.catch(catchError)
 
 					connected = true
 				} else {
-					setW3.address(undefined)
+					w3vmStore.set('address', undefined)
 				}
 			})
 			.catch(catchError)
@@ -123,7 +123,7 @@ export class Injected {
 		await provider
 			.request<string | number>({ method: 'eth_chainId' })
 			.then((chainId) => {
-				setW3.chainId(Number(chainId))
+				w3vmStore.set('chainId', Number(chainId))
 			})
 			.catch(console.error)
 	}
@@ -144,16 +144,16 @@ export class Injected {
 
 	protected onAccountChange = (accounts: string[]) => {
 		if (typeof accounts[0] !== 'undefined') {
-			setW3.address(accounts[0])
+			w3vmStore.set('address', accounts[0])
 		} else {
-			const walletProvider = getW3.walletProvider()
+			const walletProvider = w3vmStore.get('walletProvider') as Provider // TODO
 			if (walletProvider) this.removeEvents(walletProvider)
 			clearW3()
 		}
 	}
 
 	protected onChainChange = (chainId: string | number) => {
-		setW3.chainId(Number(chainId))
+		w3vmStore.set('chainId', Number(chainId))
 	}
 
 	protected onDisconnect = (error: Error) => {
