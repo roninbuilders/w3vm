@@ -70,10 +70,10 @@ export class WalletConnect extends Injected {
 
 		function onUri(uri: string) {
 			if (uri) w3vmStore.set('status', 'Connecting')
-				wcStore.set('uri', uri)
+			wcStore.set('uri', uri)
 		}
 
-		function onSessionEvent(event: unknown){
+		function onSessionEvent(event: unknown) {
 			wcStore.set('sessionEvent', event)
 		}
 

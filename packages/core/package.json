@@ -1,47 +1,39 @@
 {
-  "name": "@w3vm/core",
-  "version": "1.0.0",
-  "description": "EVM Wallets Library For Decentralized Applications",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "watch": "tsc -w",
-    "build": "tsup",
-    "upload": "pnpm run build && pnpm publish",
-    "clean": "rm -rf .turbo && rm -rf dist"
-  },
-  "type": "module",
-  "author": "Glitch-txs",
-  "license": "MIT",
-  "peerDependencies": {
-    "typescript": ">=5"
-  },
-  "peerDependenciesMeta": {
-    "typescript": {
-      "optional": true
-    }
-  },
-  "keywords": [
-    "wallet",
-    "eth",
-    "ethereum",
-    "wallets",
-    "web3"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/w3vm"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "devDependencies": {
-    "tsup": "^6.7.0"
-  },
-  "dependencies": {
-    "memomap": "^0.0.3"
-  }
+	"name": "@w3vm/core",
+	"version": "1.0.0",
+	"description": "EVM Wallets Library For Decentralized Applications",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"watch": "tsc -w",
+		"build": "tsup",
+		"upload": "pnpm run build && pnpm publish",
+		"clean": "rm -rf .turbo && rm -rf dist"
+	},
+	"type": "module",
+	"author": "Glitch-txs",
+	"license": "MIT",
+	"peerDependencies": {
+		"typescript": ">=5"
+	},
+	"peerDependenciesMeta": {
+		"typescript": {
+			"optional": true
+		}
+	},
+	"keywords": ["wallet", "eth", "ethereum", "wallets", "web3"],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/w3vm"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"tsup": "^6.7.0"
+	},
+	"dependencies": {
+		"memomap": "^0.0.3"
+	}
 }

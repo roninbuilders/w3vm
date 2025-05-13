@@ -1,5 +1,5 @@
 import { KEY_WALLET } from '../constants'
-import { w3vmStore } from '../store/w3store';
+import { w3vmStore } from '../store/w3store'
 
 import { Chain, Connector } from '../types'
 

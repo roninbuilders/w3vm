@@ -46,7 +46,7 @@ export class Injected {
 			const connected = await this.setAccountAndChainId(provider)
 			if (connected) {
 				this.addEvents(provider)
-				w3vmStore.set( 'walletProvider', provider)
+				w3vmStore.set('walletProvider', provider)
 			} else {
 				window?.localStorage.removeItem(KEY_WALLET)
 			}
@@ -71,7 +71,7 @@ export class Injected {
 				window?.localStorage.setItem(KEY_WALLET, this.id)
 
 				/* Save address, chain and provider - initialize event listeners */
-				w3vmStore.set('address', accounts[0]), w3vmStore.set( 'walletProvider', provider)
+				w3vmStore.set('address', accounts[0]), w3vmStore.set('walletProvider', provider)
 				await this.setChainId(provider), this.addEvents(provider)
 
 				const defaultChain = w3vmStore.get('defaultChain')

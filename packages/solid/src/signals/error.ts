@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
-import { subW3, getW3 } from '@w3vm/core'
+import { w3vmStore } from '@w3vm/core'
 
-const [error, setError] = createSignal(getW3.error())
-subW3.error(setError)
+const [error, setError] = createSignal(w3vmStore.get('error'))
+w3vmStore.subscribe('error', setError)
 
 export { error }
