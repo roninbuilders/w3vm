@@ -3,14 +3,14 @@ import { ReadContractQuery, WatchContractEvent, WriteContractQuery } from "../ty
 
 type W3vmQueriesStore = {
   signerOrClient: W3vmSigner | W3vmClient | undefined
-  writeContract: WriteContractQuery | undefined
-  readContract: ReadContractQuery | undefined
-  watchContractEvent: WatchContractEvent | undefined
+  writeContract: WriteContractQuery
+  readContract: ReadContractQuery
+  watchContractEvent: WatchContractEvent
 }
 
 export const w3vmQueriesStore = new Store<W3vmQueriesStore>({
   signerOrClient: undefined,
-  writeContract: undefined,
-  readContract: undefined,
-  watchContractEvent: undefined,
+  writeContract: async()=>({} as ReturnType<WriteContractQuery>),
+  readContract: async()=>({} as ReturnType<ReadContractQuery>),
+  watchContractEvent: ()=>({} as ReturnType<WatchContractEvent>),
 })

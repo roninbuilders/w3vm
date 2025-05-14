@@ -92,7 +92,7 @@ export type WriteContractQuery = <
   abi: TAbi,
   functionName: TFunctionName,
   args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
-}) => Promise<void>
+}) => Promise<string>
 
 export type ReadContractQuery = <
   TAbi extends Abi,
