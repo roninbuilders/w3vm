@@ -1,4 +1,5 @@
 export { w3vmStore } from './store/w3store'
+export { w3vmQueriesStore } from './store/queries'
 
 export {
 	Injected,

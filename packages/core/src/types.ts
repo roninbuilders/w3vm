@@ -1,4 +1,12 @@
 import { Injected } from './connectors'
+import type {
+  Abi,
+  ExtractAbiFunctionNames,
+  ExtractAbiFunction,
+  AbiParametersToPrimitiveTypes,
+	ExtractAbiEventNames,
+	ExtractAbiEvent,
+} from 'abitype'
 
 /* EIP-3085 */
 export interface Chain {
@@ -69,3 +77,71 @@ export interface Provider extends EIP1193Provider {
 
 /* W3 */
 export type Connector = Injected
+
+
+/**Queries Store */
+
+export type WriteContractQuery = <
+  TAbi extends Abi,
+  TFunctionName extends ExtractAbiFunctionNames<TAbi, 'nonpayable' | 'payable'>
+>(
+  address: string,
+  abi: TAbi,
+  functionName: TFunctionName,
+  args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
+) => Promise<void>
+
+export type ReadContractQuery = <
+  TAbi extends Abi,
+  TFunctionName extends ExtractAbiFunctionNames<TAbi, 'view' | 'pure'>
+>(
+  address: string,
+  abi: TAbi,
+  functionName: TFunctionName,
+  args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
+) => Promise<AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['outputs']>[0]>
+
+export type WatchContractEvent = <
+  TAbi extends Abi,
+  TEventName extends ExtractAbiEventNames<TAbi>
+>(
+  config: {
+    address: string
+    abi: TAbi
+    eventName: TEventName
+    onLogs: (logs: {
+      eventName: TEventName
+      args: AbiParametersToPrimitiveTypes<ExtractAbiEvent<TAbi, TEventName>['inputs']>
+    }[]) => void
+  }
+) => () => void
+
+export type SendTransaction = (params: {
+  account: string
+  to: string
+  value: bigint
+}) => Promise<string> 
+
+export type SignMessage = (params: {
+  account: string
+  message: string | Uint8Array
+}) => Promise<string>
+
+export type WaitForTransactionReceipt = (params: {
+  hash: string
+}) => Promise<{
+  blockHash: string
+  blockNumber: bigint
+  from: string
+  to?: string
+  status: 'success' | 'reverted'
+  transactionHash: string
+  // include any additional fields like above
+}>
+
+/** Global */
+
+declare global {
+	interface W3vmSigner {}
+	interface W3vmClient {}
+}

@@ -20,10 +20,14 @@ export function initW3({
 	connectors,
 	defaultChain,
 	SSR,
-}: { connectors: Connector[]; defaultChain?: Chain | number; SSR?: Boolean }) {
-	w3vmStore.set('defaultChain', defaultChain), w3vmStore.set('connectors', connectors)
-
+	chains
+}: { connectors: Connector[]; defaultChain?: Chain | number; SSR?: Boolean, chains: Chain[] }) {
 	if (typeof window === 'undefined') return
+	
+	w3vmStore.set('defaultChain', defaultChain)
+	w3vmStore.set('connectors', connectors)
+	w3vmStore.set('chains', chains)
+
 	if (SSR) return { connectors }
 
 	initEIP6963()

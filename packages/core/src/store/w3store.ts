@@ -30,6 +30,10 @@ interface W3Store {
 	 * extended EIP-1193 provider of the connected wallet.
 	 */
 	walletProvider?: Provider
+	/**
+	 * Application's supported chains
+	 */
+	chains: Chain[]
 }
 
 export const w3vmStore = new Store<W3Store>({
@@ -40,4 +44,5 @@ export const w3vmStore = new Store<W3Store>({
 	error: undefined,
 	connectors: [],
 	walletProvider: undefined,
+	chains: []
 })

@@ -4,7 +4,9 @@
 	"description": "EVM Wallets Library For Decentralized Applications",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"watch": "tsc -w",
 		"build": "tsup",
@@ -22,7 +24,13 @@
 			"optional": true
 		}
 	},
-	"keywords": ["wallet", "eth", "ethereum", "wallets", "web3"],
+	"keywords": [
+		"wallet",
+		"eth",
+		"ethereum",
+		"wallets",
+		"web3"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/w3vm"
@@ -34,6 +42,7 @@
 		"tsup": "^6.7.0"
 	},
 	"dependencies": {
+		"abitype": "^1.0.8",
 		"memomap": "^0.0.3"
 	}
 }
