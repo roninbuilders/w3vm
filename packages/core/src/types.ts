@@ -8,6 +8,8 @@ import type {
 	ExtractAbiEvent,
 } from 'abitype'
 
+export type InitConfig = { connectors: Connector[]; defaultChain?: Chain | number; SSR?: Boolean, chains: Chain[] }
+
 /* EIP-3085 */
 export interface Chain {
 	chainId: string
@@ -84,22 +86,24 @@ export type Connector = Injected
 export type WriteContractQuery = <
   TAbi extends Abi,
   TFunctionName extends ExtractAbiFunctionNames<TAbi, 'nonpayable' | 'payable'>
->(
+>(params: {
+  chain?: Chain,
   address: string,
   abi: TAbi,
   functionName: TFunctionName,
   args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
-) => Promise<void>
+}) => Promise<void>
 
 export type ReadContractQuery = <
   TAbi extends Abi,
   TFunctionName extends ExtractAbiFunctionNames<TAbi, 'view' | 'pure'>
->(
+>(params: {
+  chain?: Chain,
   address: string,
   abi: TAbi,
   functionName: TFunctionName,
   args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
-) => Promise<AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['outputs']>[0]>
+}) => Promise<AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['outputs']>[0]>
 
 export type WatchContractEvent = <
   TAbi extends Abi,

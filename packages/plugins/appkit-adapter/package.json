@@ -1,0 +1,41 @@
+{
+  "name": "appkit-adapter",
+  "version": "0.0.0",
+  "description": "Appkit Adapter for W3vm",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "up": "pnpm add @w3vm/core@latest",
+    "upload": "pnpm run build && npm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w3vm"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@w3vm/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "author": "glitch-txs",
+  "license": "MIT",
+  "dependencies": {
+    "@reown/appkit": "^1.7.4",
+    "@reown/appkit-common": "^1.7.4",
+    "@reown/appkit-controllers": "^1.7.4",
+    "@reown/appkit-polyfills": "^1.7.4",
+    "@reown/appkit-scaffold-ui": "^1.7.4",
+    "@reown/appkit-utils": "^1.7.4",
+    "@reown/appkit-wallet": "^1.7.4",
+    "@walletconnect/universal-provider": "^2.20.2"
+  }
+}

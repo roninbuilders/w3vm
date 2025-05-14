@@ -1,5 +1,5 @@
 import { EIP6963Connector } from '../connectors/EIP6963'
-import { Chain, Connector, EIP6963AnnounceProviderEvent } from '../types'
+import { EIP6963AnnounceProviderEvent, InitConfig } from '../types'
 import { KEY_WALLET } from '../constants'
 import { w3vmStore } from '../store/w3store'
 
@@ -21,7 +21,7 @@ export function initW3({
 	defaultChain,
 	SSR,
 	chains
-}: { connectors: Connector[]; defaultChain?: Chain | number; SSR?: Boolean, chains: Chain[] }) {
+}: InitConfig) {
 	if (typeof window === 'undefined') return
 	
 	w3vmStore.set('defaultChain', defaultChain)

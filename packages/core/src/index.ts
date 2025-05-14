@@ -22,6 +22,7 @@ export type {
 	ProviderRpcError,
 	Connector,
 	RequestArguments,
+	InitConfig
 } from './types'
 
 export {
