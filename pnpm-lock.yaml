@@ -224,6 +224,9 @@ importers:
       '@walletconnect/universal-provider':
         specifier: ^2.20.2
         version: 2.20.2(@react-native-async-storage/async-storage@1.24.0(react-native@0.79.2(@babel/core@7.27.1)(@types/react@18.2.8)(bufferutil@4.0.9)(react@18.2.0)(utf-8-validate@5.0.10)))(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.4)
+      viem:
+        specifier: '>=2.29.0'
+        version: 2.29.2(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.4)
     devDependencies:
       typescript:
         specifier: ^5.8.3

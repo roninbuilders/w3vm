@@ -1,7 +1,5 @@
 export { WalletConnect } from './connector'
 
 export {
-	setWC,
-	subWC,
-	getWC,
+	wcStore
 } from './store'

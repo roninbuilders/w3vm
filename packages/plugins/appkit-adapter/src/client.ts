@@ -15,11 +15,11 @@ import {
 } from '@reown/appkit-controllers'
 import { CaipNetworksUtil } from '@reown/appkit-utils'
 import { AdapterBlueprint } from '@reown/appkit/adapters'
-import { WalletConnectConnector } from '@reown/appkit/connectors'
 
-import { authConnector } from './connectors/AuthConnector.js'
+import { AuthConnector } from './connectors/AuthConnector.js'
 import { LimitterUtil } from './utils/LimitterUtil.js'
 import { parseWalletCapabilities } from './utils/helpers.js'
+import { formatUnits, parseUnits } from 'viem'
 
 interface PendingTransactionsFilter {
   enable: boolean
@@ -94,6 +94,7 @@ export class WagmiAdapter extends AdapterBlueprint {
       customRpcUrls?: CustomRpcUrlMap
       isEmail: boolean
       socials: SocialProvider[]
+      enableAuthLogger?: boolean
     }
   ) {
     this.w3vmChains = configParams.networks.filter(cn => cn.chainNamespace === CommonConstantsUtil.CHAIN.EVM).forEach(
@@ -123,12 +124,9 @@ export class WagmiAdapter extends AdapterBlueprint {
 
   if (configParams.isEmail || socials) {
     connectors.push(
-      authConnector({ //TODO authConnector
-        chains: this.w3vmChains,
-        options: { 
-          projectId: configParams.projectId,
-           //enableAuthLogger: configParams.enableAuthLogger
-        }
+      new AuthConnector({
+        projectId: configParams.projectId, 
+        enableAuthLogger: configParams.enableAuthLogger
       })
     )
   }
@@ -163,7 +161,7 @@ export class WagmiAdapter extends AdapterBlueprint {
     })
   }
 
-  syncConnectors(){} //TODO check what they do
+  syncConnectors(){}
 
   async syncConnection(params: any): Promise<any>{}
 
@@ -171,8 +169,8 @@ export class WagmiAdapter extends AdapterBlueprint {
     if (!this.pendingTransactionsFilter.enable || this.unwatchPendingTransactions) {
       return
     }
-
-    this.unwatchPendingTransactions = watchPendingTransactions(this.wagmiConfig, {
+    const watchPendingTransactions = w3vmQueriesStore.get('watchPendingTransactions')
+    this.unwatchPendingTransactions = watchPendingTransactions({
       pollingInterval: this.pendingTransactionsFilter.pollingInterval,
       /* Magic RPC does not support the pending transactions. We handle transaction for the AuthConnector cases in AppKit client to handle all clients at once. Adding the onError handler to avoid the error to throw. */
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -195,9 +193,10 @@ export class WagmiAdapter extends AdapterBlueprint {
     params: AdapterBlueprint.SignMessageParams
   ): Promise<AdapterBlueprint.SignMessageResult> {
     try {
-      const signature = await signMessage(this.wagmiConfig, {
+      const signMessage = w3vmQueriesStore.get('signMessage')
+      const signature = await signMessage({
         message: params.message,
-        account: params.address as Hex
+        account: params.address
       })
 
       return { signature }
@@ -209,22 +208,24 @@ export class WagmiAdapter extends AdapterBlueprint {
   public async sendTransaction(
     params: AdapterBlueprint.SendTransactionParams
   ): Promise<AdapterBlueprint.SendTransactionResult> {
-    const { chainId, address } = getAccount(this.wagmiConfig)
+    const address = w3vmStore.get('address')
+    const chainId = w3vmStore.get('chainId')
+    const sendTransaction = w3vmQueriesStore.get('sendTransaction')
+    const waitForTransactionReceipt = w3vmQueriesStore.get('waitForTransactionReceipt')
     const txParams = {
-      account: address,
-      to: params.to as Hex,
+      account: address as string,
+      to: params.to,
       value: Number.isNaN(Number(params.value)) ? BigInt(0) : BigInt(params.value),
       gas: params.gas ? BigInt(params.gas) : undefined,
       gasPrice: params.gasPrice ? BigInt(params.gasPrice) : undefined,
-      data: params.data as Hex,
+      data: params.data,
       chainId,
       type: 'legacy' as const,
       parameters: ['nonce'] as const
     }
 
-    await prepareTransactionRequest(this.wagmiConfig, txParams)
-    const tx = await wagmiSendTransaction(this.wagmiConfig, txParams)
-    await waitForTransactionReceipt(this.wagmiConfig, { hash: tx, timeout: 25000 })
+    const tx = await sendTransaction(txParams)
+    await waitForTransactionReceipt({ hash: tx, timeout: 25000 })
 
     return { hash: tx }
   }
@@ -250,11 +251,11 @@ export class WagmiAdapter extends AdapterBlueprint {
     params: AdapterBlueprint.EstimateGasTransactionArgs
   ): Promise<AdapterBlueprint.EstimateGasTransactionResult> {
     try {
-      const result = await wagmiEstimateGas(this.wagmiConfig, {
-        account: params.address as Hex,
-        to: params.to as Hex,
-        data: params.data as Hex,
-        type: 'legacy'
+      const estimateGas = w3vmQueriesStore.get('estimateGas')
+      const result = await estimateGas({
+        account: params.address as string,
+        to: params.to as string,
+        data: params.data as string,
       })
 
       return { gas: result }
@@ -264,14 +265,12 @@ export class WagmiAdapter extends AdapterBlueprint {
   }
 
   public parseUnits(params: AdapterBlueprint.ParseUnitsParams): AdapterBlueprint.ParseUnitsResult {
-    const parseUnits = w3vmStore.get('parseUnits')
     return parseUnits(params.value, params.decimals)
   }
 
   public formatUnits(
     params: AdapterBlueprint.FormatUnitsParams
   ): AdapterBlueprint.FormatUnitsResult {
-    const formatUnits = w3vmStore.get('formatUnits')
     return formatUnits(params.value, params.decimals)
   }
 
@@ -297,7 +296,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   }
 
   public async connect(
-    params: AdapterBlueprint.ConnectParams & { socialUri: unknown }
+    params: AdapterBlueprint.ConnectParams
   ): Promise<AdapterBlueprint.ConnectResult> {
     const { id, provider, type, info, chainId } = params
     const connector = this.getW3vmConnector(id)
@@ -335,6 +334,10 @@ export class WagmiAdapter extends AdapterBlueprint {
     }
   }
 
+  public async reconnect(params: AdapterBlueprint.ReconnectParams): Promise<void> {
+    await this.connect(params)
+  }
+
   public async getBalance(
     params: AdapterBlueprint.GetBalanceParams
   ): Promise<AdapterBlueprint.GetBalanceResult> {
@@ -345,7 +348,7 @@ export class WagmiAdapter extends AdapterBlueprint {
       return Promise.resolve({ balance: '0.00', symbol: 'ETH' })
     }
 
-    if (caipNetwork && this.wagmiConfig) {
+    if (caipNetwork) {
       const caipAddress = `${caipNetwork.caipNetworkId}:${params.address}`
       const cachedPromise = this.balancePromises[caipAddress]
       if (cachedPromise) {
@@ -357,14 +360,16 @@ export class WagmiAdapter extends AdapterBlueprint {
         return { balance: cachedBalance.balance, symbol: cachedBalance.symbol }
       }
 
+      const getBalance = w3vmQueriesStore.get('getBalance')
+
       this.balancePromises[caipAddress] = new Promise<AdapterBlueprint.GetBalanceResult>(
         async resolve => {
           try {
-            const chainId = Number(params.chainId)
-            const balance = await getBalance(this.wagmiConfig, {
-              address: params.address as Hex,
-              chainId,
-              token: params.tokens?.[caipNetwork.caipNetworkId]?.address as Hex
+            const chainId = params.chainId?.toString()
+            const balance = await getBalance({
+              address: params.address as string,
+              chainId: chainId as string,
+              token: params.tokens?.[caipNetwork.caipNetworkId]?.address as string
             })
 
             StorageUtil.updateNativeBalanceCache({
@@ -392,7 +397,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   }
 
   public getWalletConnectProvider(): AdapterBlueprint.GetWalletConnectProviderResult {
-    return this.getWagmiConnector('walletConnect')?.['provider'] as UniversalProvider
+    return this.connectors.find(c => c.id === 'walletConnect')?.provider as UniversalProvider
   }
 
   public async disconnect() {
@@ -459,22 +464,6 @@ export class WagmiAdapter extends AdapterBlueprint {
     return provider.request({ method: 'wallet_getAssets', params: [params] })
   }
 
-  public override setUniversalProvider(universalProvider: UniversalProvider): void { //TODO what;s this for
-    universalProvider.on('connect', () => {
-      const connections = getConnections(this.wagmiConfig)
-      const connector = this.getWagmiConnector('walletConnect')
-      if (connector && !connections.find(c => c.connector.id === connector.id)) {
-        reconnect(this.wagmiConfig, {
-          connectors: [connector]
-        })
-      }
-    })
-    this.addConnector(
-      new WalletConnectConnector({
-        provider: universalProvider,
-        caipNetworks: this.getCaipNetworks(),
-        namespace: 'eip155'
-      })
-    )
+  public override setUniversalProvider(universalProvider: UniversalProvider): void {
   }
 }

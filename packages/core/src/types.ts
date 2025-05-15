@@ -131,8 +131,26 @@ export type SignMessage = (params: {
   message: string | Uint8Array
 }) => Promise<string>
 
+export type EstimateGas = (params: {
+  account?: string
+  to?: string
+  value?: bigint
+  data?: string
+}) => Promise<bigint>
+
+export type GetBalance = (params: {
+  address: string
+  chainId: string
+  token: string
+  blockTag?: 'latest' | 'earliest' | 'pending' | bigint // optional block
+}) => Promise<{
+  formatted: string
+  symbol: string
+}>
+
 export type WaitForTransactionReceipt = (params: {
   hash: string
+  timeout?: number
 }) => Promise<{
   blockHash: string
   blockNumber: bigint
@@ -142,6 +160,12 @@ export type WaitForTransactionReceipt = (params: {
   transactionHash: string
   // include any additional fields like above
 }>
+
+export type WatchPendingTransactions = (params: {
+  pollingInterval?: number | undefined
+  onError?: (error: Error)=>void
+  onTransactions: (hashes: string[]) => void
+}) => () => void
 
 /** Global */
 

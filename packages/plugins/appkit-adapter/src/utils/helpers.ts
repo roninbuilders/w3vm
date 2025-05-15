@@ -1,16 +1,16 @@
-import type { Connector } from '@wagmi/core'
 import { UniversalProvider } from '@walletconnect/universal-provider'
 import { type Hex } from 'viem'
 
 import { WcHelpersUtil } from '@reown/appkit'
 import { type CaipNetworkId } from '@reown/appkit-common'
 import { ConstantsUtil, PresetsUtil } from '@reown/appkit-utils'
+import { Connector } from '@w3vm/core'
 
 export async function getWalletConnectCaipNetworks(connector?: Connector) {
   if (!connector) {
     throw new Error('networkControllerClient:getApprovedCaipNetworks - connector is undefined')
   }
-  const provider = (await connector?.getProvider()) as Awaited<
+  const provider = (await connector?.getProvider()) as unknown as Awaited<
     ReturnType<(typeof UniversalProvider)['init']>
   >
 
