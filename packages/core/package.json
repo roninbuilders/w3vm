@@ -43,6 +43,6 @@
 	},
 	"dependencies": {
 		"abitype": "^1.0.8",
-		"memomap": "^0.0.3"
+		"memomap": "^0.0.5"
 	}
 }

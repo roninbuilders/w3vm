@@ -1,0 +1,26 @@
+{
+  "name": "appkit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@reown/appkit": "^1.7.4",
+    "@reown/appkit-adapter-wagmi": "^1.7.5",
+    "@w3vm/appkit-adapter": "workspace:*",
+    "@w3vm/solid": "workspace:*",
+    "@w3vm/walletconnect": "workspace:*",
+    "@wagmi/core": "^2.17.2",
+    "solid-js": "^1.9.5",
+    "viem": ">=2.29.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-solid": "^2.11.6"
+  }
+}

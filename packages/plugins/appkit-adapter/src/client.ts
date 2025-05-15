@@ -13,13 +13,14 @@ import {
   ConstantsUtil as CoreConstantsUtil,
   type Provider
 } from '@reown/appkit-controllers'
-import { CaipNetworksUtil } from '@reown/appkit-utils'
+import { CaipNetworksUtil, PresetsUtil } from '@reown/appkit-utils'
 import { AdapterBlueprint } from '@reown/appkit/adapters'
 
 import { AuthConnector } from './connectors/AuthConnector.js'
 import { LimitterUtil } from './utils/LimitterUtil.js'
 import { parseWalletCapabilities } from './utils/helpers.js'
 import { formatUnits, parseUnits } from 'viem'
+import { AppKitOptions } from '@reown/appkit'
 
 interface PendingTransactionsFilter {
   enable: boolean
@@ -32,7 +33,7 @@ const DEFAULT_PENDING_TRANSACTIONS_FILTER = {
   pollingInterval: 30_000
 }
 
-export class WagmiAdapter extends AdapterBlueprint {
+export class W3vmAdapter extends AdapterBlueprint {
   public w3vmChains: Chain[] | undefined
   public w3vmConfig: ReturnType<typeof initW3> | undefined
   public w3vmConnectors: Connector[]
@@ -47,10 +48,11 @@ export class WagmiAdapter extends AdapterBlueprint {
       pendingTransactionsFilter?: PendingTransactionsFilter
       projectId: string
       customRpcUrls?: CustomRpcUrlMap
-      isEmail: boolean
-      socials: SocialProvider[]
+      isEmail?: boolean
+      socials?: SocialProvider[]
     }
   ) {
+    console.log('Calling constructor from Adapter with: ', configParams)
     const networks = CaipNetworksUtil.extendCaipNetworks(configParams.networks, {
       projectId: configParams.projectId,
       customNetworkImageUrls: {},
@@ -92,11 +94,12 @@ export class WagmiAdapter extends AdapterBlueprint {
       networks: CaipNetwork[]
       projectId: string
       customRpcUrls?: CustomRpcUrlMap
-      isEmail: boolean
-      socials: SocialProvider[]
+      isEmail?: boolean
+      socials?: SocialProvider[]
       enableAuthLogger?: boolean
     }
   ) {
+    console.log('Calling createConfig from Adapter with: ', configParams)
     this.w3vmChains = configParams.networks.filter(cn => cn.chainNamespace === CommonConstantsUtil.CHAIN.EVM).forEach(
       (caipNetwork) => {
         const customRpcs = caipNetwork.rpcUrls[caipNetwork.caipNetworkId]?.http
@@ -139,6 +142,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   }
 
   private setupWatchers() {
+    console.log('Calling setupWatchers from Adapter with: ')
     w3vmStore.subscribe('address', (address)=>{
       if(address){
         this.setupWatchPendingTransactions()
@@ -161,9 +165,33 @@ export class WagmiAdapter extends AdapterBlueprint {
     })
   }
 
-  syncConnectors(){}
+  override async syncConnectors(options: AppKitOptions): Promise<void>{
+    console.log('Calling syncConnectors from Adapter with: ', options)
 
-  async syncConnection(params: any): Promise<any>{}
+    w3vmStore.get('connectors').forEach(async (connector) => {
+      const key = connector.id === 'coinbase' ? 'coinbaseWalletSDK' : connector.id
+
+      const provider = await connector.getProvider()
+      if (this.namespace) {
+        this.addConnector({
+          id: key,
+          explorerId: PresetsUtil.ConnectorExplorerIds[key],
+          imageUrl: options?.connectorImages?.[key],
+          name: PresetsUtil.ConnectorNamesMap[key] || 'Unknown',
+          imageId: PresetsUtil.ConnectorImageIds[key],
+          type: PresetsUtil.ConnectorTypesMap[key] ?? 'EXTERNAL',
+          info: connector.uuid ? undefined : { rdns: connector.id },
+          chain: this.namespace,
+          chains: [],
+          provider
+        })
+      }
+    })
+  }
+
+  async syncConnection(params: any): Promise<any>{
+    console.log('Calling syncConnection from Adapter with: ', params)
+  }
 
   private setupWatchPendingTransactions() {
     if (!this.pendingTransactionsFilter.enable || this.unwatchPendingTransactions) {
@@ -397,7 +425,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   }
 
   public getWalletConnectProvider(): AdapterBlueprint.GetWalletConnectProviderResult {
-    return this.connectors.find(c => c.id === 'walletConnect')?.provider as UniversalProvider
+    return this.connectors.find(c => c.id === 'walletConnect')?.provider as typeof UniversalProvider
   }
 
   public async disconnect() {
@@ -412,7 +440,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   }
 
   public async getCapabilities(params: string) {
-    const provider = w3vmStore.get('walletProvider') as unknown as UniversalProvider
+    const provider = w3vmStore.get('walletProvider') as unknown as Awaited<ReturnType<typeof UniversalProvider['UniversalProvider']['init']>> 
 
     if (!provider) {
       throw new Error('connectionControllerClient:getCapabilities - provider is undefined')
@@ -431,7 +459,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   }
 
   public async grantPermissions(params: AdapterBlueprint.GrantPermissionsParams) {
-    const provider = w3vmStore.get('walletProvider') as unknown as UniversalProvider
+    const provider = w3vmStore.get('walletProvider')
 
     if (!provider) {
       throw new Error('connectionControllerClient:grantPermissions - provider is undefined')
@@ -443,7 +471,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   public async revokePermissions(
     params: AdapterBlueprint.RevokePermissionsParams
   ): Promise<`0x${string}`> {
-    const provider = w3vmStore.get('walletProvider') as unknown as UniversalProvider
+    const provider = w3vmStore.get('walletProvider')
 
     if (!provider) {
       throw new Error('connectionControllerClient:revokePermissions - provider is undefined')
@@ -455,7 +483,7 @@ export class WagmiAdapter extends AdapterBlueprint {
   public async walletGetAssets(
     params: AdapterBlueprint.WalletGetAssetsParams
   ): Promise<AdapterBlueprint.WalletGetAssetsResponse> {
-    const provider = w3vmStore.get('walletProvider') as unknown as UniversalProvider
+    const provider = w3vmStore.get('walletProvider')
 
     if (!provider) {
       throw new Error('connectionControllerClient:walletGetAssets - provider is undefined')
@@ -464,6 +492,14 @@ export class WagmiAdapter extends AdapterBlueprint {
     return provider.request({ method: 'wallet_getAssets', params: [params] })
   }
 
-  public override setUniversalProvider(universalProvider: UniversalProvider): void {
+  public override setUniversalProvider(universalProvider: Awaited<ReturnType<typeof UniversalProvider['UniversalProvider']['init']>> ): void {
+    universalProvider.on('connect', () => {
+      const connector = this.connectors.find(c => c.id === 'walletConnect') as unknown as Connector
+      if (connector) {
+        connectW3({
+          connector
+        })
+      }
+    })
   }
 }

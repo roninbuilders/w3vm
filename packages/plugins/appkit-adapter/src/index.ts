@@ -1,6 +1,4 @@
 import '@reown/appkit-polyfills'
 
-export { WagmiAdapter } from './client.js'
-
-// -- Connectors
-export { authConnector } from './connectors/AuthConnector.js'
+export { W3vmAdapter } from './client.js'
+export { AuthConnector } from './connectors/AuthConnector.js'

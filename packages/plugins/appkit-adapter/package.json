@@ -1,9 +1,10 @@
 {
-  "name": "appkit-adapter",
+  "name": "@w3vm/appkit-adapter",
   "version": "0.0.0",
   "description": "Appkit Adapter for W3vm",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -37,6 +38,7 @@
     "@reown/appkit-utils": "^1.7.4",
     "@reown/appkit-wallet": "^1.7.4",
     "@walletconnect/universal-provider": "^2.20.2",
+    "valtio": "1.13.2",
     "viem": ">=2.29.0"
   }
 }
