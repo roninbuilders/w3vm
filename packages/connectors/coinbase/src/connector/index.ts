@@ -3,9 +3,6 @@ import { Injected, Provider, _clearW3 as clearW3, w3vmStore, _KEY_WALLET as KEY_
 type CoinbaseOptions = {
 	appName: string
 	appLogoUrl?: string
-	darkMode?: boolean
-	defaultChainId?: number
-	defaultJsonRpcUrl?: string
 	icon?: any
 }
 
@@ -17,7 +14,7 @@ export class Coinbase extends Injected {
 	getProvider: () => Promise<Provider> | Provider | undefined
 
 	constructor(options: CoinbaseOptions) {
-		const { appName, appLogoUrl, darkMode, defaultChainId, defaultJsonRpcUrl, icon } = options
+		const { appName, appLogoUrl, icon } = options
 
 		const getProvider = async () => {
 			if (typeof window === 'undefined') return
@@ -34,10 +31,9 @@ export class Coinbase extends Injected {
 			const coinbaseWallet = new CoinbaseWalletSDK({
 				appName,
 				appLogoUrl,
-				darkMode,
 			})
 
-			this.provider = coinbaseWallet.makeWeb3Provider(defaultJsonRpcUrl, defaultChainId)
+			this.provider = coinbaseWallet.makeWeb3Provider() as Provider
 			return this.provider
 		}
 

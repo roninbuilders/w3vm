@@ -21,6 +21,7 @@ import { LimitterUtil } from './utils/LimitterUtil.js'
 import { parseWalletCapabilities } from './utils/helpers.js'
 import { formatUnits, parseUnits } from 'viem'
 import { AppKitOptions } from '@reown/appkit'
+import { WalletConnectConnector } from '@reown/appkit/connectors'
 
 interface PendingTransactionsFilter {
   enable: boolean
@@ -179,7 +180,7 @@ export class W3vmAdapter extends AdapterBlueprint {
           imageUrl: options?.connectorImages?.[key],
           name: PresetsUtil.ConnectorNamesMap[key] || 'Unknown',
           imageId: PresetsUtil.ConnectorImageIds[key],
-          type: PresetsUtil.ConnectorTypesMap[key] ?? 'EXTERNAL',
+          type: PresetsUtil.ConnectorTypesMap[key] ?? 'ANNOUNCED',
           info: connector.uuid ? undefined : { rdns: connector.id },
           chain: this.namespace,
           chains: [],
@@ -190,7 +191,17 @@ export class W3vmAdapter extends AdapterBlueprint {
   }
 
   async syncConnection(params: any): Promise<any>{
-    console.log('Calling syncConnection from Adapter with: ', params)
+    const address = w3vmStore.get('address')
+    const chainId = w3vmStore.get('chainId')
+    const provider = w3vmStore.get('walletProvider')
+    const connector = this.w3vmConnectors.find(c => c.id === params.id)
+    return {
+      address,
+      chainId,
+      provider,
+      type: connector?.id,
+      id: connector?.id
+    }
   }
 
   private setupWatchPendingTransactions() {
@@ -326,19 +337,13 @@ export class W3vmAdapter extends AdapterBlueprint {
   public async connect(
     params: AdapterBlueprint.ConnectParams
   ): Promise<AdapterBlueprint.ConnectResult> {
-    const { id, provider, type, info, chainId } = params
+    const { id, provider, type, chainId } = params
     const connector = this.getW3vmConnector(id)
 
     if (!connector) {
       throw new Error('connectionControllerClient:connectExternal - connector is undefined')
     }
 
-    if (provider && info && connector.id === CommonConstantsUtil.CONNECTOR_ID.EIP6963) {
-      // @ts-expect-error Exists on EIP6963Connector
-      connector.setEip6963Wallet?.({ provider, info })
-    }
-
-    // If the connector is already connected, return the connection
     const address = w3vmStore.get('address')
     if (address) {
       const chainId = w3vmStore.get('chainId') as number
@@ -501,5 +506,12 @@ export class W3vmAdapter extends AdapterBlueprint {
         })
       }
     })
+    this.addConnector(
+      new WalletConnectConnector({
+        provider: universalProvider,
+        caipNetworks: this.getCaipNetworks(),
+        namespace: 'eip155'
+      })
+    )
   }
 }
