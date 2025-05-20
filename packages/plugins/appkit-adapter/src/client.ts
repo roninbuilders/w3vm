@@ -16,12 +16,11 @@ import {
 import { CaipNetworksUtil, PresetsUtil } from '@reown/appkit-utils'
 import { AdapterBlueprint } from '@reown/appkit/adapters'
 
-import { AuthConnector } from './connectors/AuthConnector.js'
 import { LimitterUtil } from './utils/LimitterUtil.js'
 import { parseWalletCapabilities } from './utils/helpers.js'
 import { formatUnits, parseUnits } from 'viem'
-import { AppKitOptions } from '@reown/appkit'
 import { WalletConnectConnector } from '@reown/appkit/connectors'
+import { AuthConnector } from './connectors/AuthConnector.js'
 
 interface PendingTransactionsFilter {
   enable: boolean
@@ -53,7 +52,6 @@ export class W3vmAdapter extends AdapterBlueprint {
       socials?: SocialProvider[]
     }
   ) {
-    console.log('Calling constructor from Adapter with: ', configParams)
     const networks = CaipNetworksUtil.extendCaipNetworks(configParams.networks, {
       projectId: configParams.projectId,
       customNetworkImageUrls: {},
@@ -63,7 +61,7 @@ export class W3vmAdapter extends AdapterBlueprint {
     super()
     this.w3vmConnectors = configParams.connectors
     this.namespace = CommonConstantsUtil.CHAIN.EVM
-    this.adapterType = CommonConstantsUtil.ADAPTER_TYPES.WAGMI
+    this.adapterType = "w3vm"
     this.projectId = configParams.projectId
 
     this.pendingTransactionsFilter = {
@@ -100,12 +98,11 @@ export class W3vmAdapter extends AdapterBlueprint {
       enableAuthLogger?: boolean
     }
   ) {
-    console.log('Calling createConfig from Adapter with: ', configParams)
-    this.w3vmChains = configParams.networks.filter(cn => cn.chainNamespace === CommonConstantsUtil.CHAIN.EVM).forEach(
+    this.w3vmChains = configParams.networks.filter(cn => cn.chainNamespace === CommonConstantsUtil.CHAIN.EVM).map(
       (caipNetwork) => {
         const customRpcs = caipNetwork.rpcUrls[caipNetwork.caipNetworkId]?.http
         const rpcUrls = customRpcs?.length ? [...caipNetwork.rpcUrls.default.http, ...customRpcs] : [...caipNetwork.rpcUrls.default.http]
-        
+
         return {            
           chainId: caipNetwork.id.toString(),
           blockExplorerUrls: caipNetwork.blockExplorers?.default.url ? [caipNetwork.blockExplorers?.default.url] : undefined,
@@ -126,24 +123,22 @@ export class W3vmAdapter extends AdapterBlueprint {
       ? configParams.socials?.length > 0
       : (configParams.socials ?? CoreConstantsUtil.DEFAULT_FEATURES.socials)
 
-  if (configParams.isEmail || socials) {
-    connectors.push(
-      new AuthConnector({
-        projectId: configParams.projectId, 
-        enableAuthLogger: configParams.enableAuthLogger
-      })
-    )
-  }
+    if (configParams.isEmail || socials) {
+      connectors.push(
+        new AuthConnector({
+          projectId: configParams.projectId, 
+          enableAuthLogger: configParams.enableAuthLogger
+        })
+      )
+    }
 
     this.w3vmConfig = initW3({
-      ...configParams,
       chains: this.w3vmChains,
       connectors
     })
   }
 
   private setupWatchers() {
-    console.log('Calling setupWatchers from Adapter with: ')
     w3vmStore.subscribe('address', (address)=>{
       if(address){
         this.setupWatchPendingTransactions()
@@ -164,20 +159,39 @@ export class W3vmAdapter extends AdapterBlueprint {
         })
       }
     })
+
+    w3vmStore.subscribe('connectors', async (connectors)=>{
+      for (const connector of connectors){
+        const key = connector.id === 'coinbase' ? 'coinbaseWalletSDK' : connector.id
+        const provider = await connector.getProvider()
+        if (this.namespace) {
+          this.addConnector({
+            id: key,
+            explorerId: PresetsUtil.ConnectorExplorerIds[key],
+            imageUrl: connector.icon,
+            name: PresetsUtil.ConnectorNamesMap[key] || 'Unknown',
+            imageId: PresetsUtil.ConnectorImageIds[key],
+            type: PresetsUtil.ConnectorTypesMap[key] ?? 'ANNOUNCED',
+            info: connector.uuid ? undefined : { rdns: connector.id },
+            chain: this.namespace,
+            chains: [],
+            provider
+          })
+        }
+      }
+    })
   }
 
-  override async syncConnectors(options: AppKitOptions): Promise<void>{
-    console.log('Calling syncConnectors from Adapter with: ', options)
-
-    w3vmStore.get('connectors').forEach(async (connector) => {
+  override async syncConnectors(): Promise<void>{
+    const connectors = w3vmStore.get('connectors') 
+    for (const connector of connectors){
       const key = connector.id === 'coinbase' ? 'coinbaseWalletSDK' : connector.id
-
       const provider = await connector.getProvider()
       if (this.namespace) {
         this.addConnector({
           id: key,
           explorerId: PresetsUtil.ConnectorExplorerIds[key],
-          imageUrl: options?.connectorImages?.[key],
+          imageUrl: connector.icon,
           name: PresetsUtil.ConnectorNamesMap[key] || 'Unknown',
           imageId: PresetsUtil.ConnectorImageIds[key],
           type: PresetsUtil.ConnectorTypesMap[key] ?? 'ANNOUNCED',
@@ -187,9 +201,9 @@ export class W3vmAdapter extends AdapterBlueprint {
           provider
         })
       }
-    })
+    }
   }
-
+  
   async syncConnection(params: any): Promise<any>{
     const address = w3vmStore.get('address')
     const chainId = w3vmStore.get('chainId')
@@ -315,23 +329,21 @@ export class W3vmAdapter extends AdapterBlueprint {
 
   public override async connectWalletConnect(chainId?: number | string) {
     // Attempt one click auth first, if authenticated, still connect with wagmi to store the session
-    const walletConnectConnector = this.w3vmConnectors.find(c =>c.id === 'walletConnect')
+    const walletConnectConnector = this.getWalletConnectConnector()
+    await walletConnectConnector.authenticate()
 
-    if (!walletConnectConnector) {
+    const w3vmConnector = this.w3vmConnectors.find(c =>c.id === 'walletConnect')
+    if (!w3vmConnector) {
       throw new Error('UniversalAdapter:connectWalletConnect - connector not found')
     }
 
-    await (walletConnectConnector as unknown as{ authenticate: ()=>Promise<void>}).authenticate()
-
-
-    await connectW3({ connector: walletConnectConnector })
+    await connectW3({ connector: w3vmConnector })
 
     if (w3vmStore.get('chainId') !== Number(chainId)) {
       await switchChain({ chain: Number(chainId) })
     }
 
-    const provider = await walletConnectConnector.getProvider()
-    return { clientId: await (provider as any)?.client.core.crypto.getClientId() }
+    return { clientId: await walletConnectConnector.provider.client.core.crypto.getClientId() }
   }
 
   public async connect(
@@ -429,8 +441,8 @@ export class W3vmAdapter extends AdapterBlueprint {
     return { balance: '', symbol: '' }
   }
 
-  public getWalletConnectProvider(): AdapterBlueprint.GetWalletConnectProviderResult {
-    return this.connectors.find(c => c.id === 'walletConnect')?.provider as typeof UniversalProvider
+  public async getWalletConnectProvider(): AdapterBlueprint.GetWalletConnectProviderResult {
+    return await this.connectors.find(c => c.id === 'walletConnect')?.provider as typeof UniversalProvider
   }
 
   public async disconnect() {
@@ -498,6 +510,7 @@ export class W3vmAdapter extends AdapterBlueprint {
   }
 
   public override setUniversalProvider(universalProvider: Awaited<ReturnType<typeof UniversalProvider['UniversalProvider']['init']>> ): void {
+    universalProvider.on('display_uri', console.log)
     universalProvider.on('connect', () => {
       const connector = this.connectors.find(c => c.id === 'walletConnect') as unknown as Connector
       if (connector) {

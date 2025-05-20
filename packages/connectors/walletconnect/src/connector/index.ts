@@ -1,6 +1,3 @@
-import EthereumProvider, {
-	type EthereumProviderOptions,
-} from '@walletconnect/ethereum-provider/dist/types/EthereumProvider'
 import {
 	Chain,
 	Injected,
@@ -11,10 +8,9 @@ import {
 	_catchError as catchError,
 } from '@w3vm/core'
 import { wcStore } from '../store'
+import EthereumProvider, { EthereumProviderOptions } from '../provider'
 
 type WalletConnectOptions = {
-	showQrModal?: boolean
-	qrModalOptions?: EthereumProviderOptions['qrModalOptions']
 	metadata?: EthereumProviderOptions['metadata']
 	icon?: any
 	projectId: string
@@ -44,17 +40,13 @@ export class WalletConnect extends Injected {
 	}
 
 	async init() {
-		const { EthereumProvider } = await import('@walletconnect/ethereum-provider')
-
-		const { showQrModal, qrModalOptions, projectId, chains: optionalChains, metadata } = this.options
+		const { projectId, chains: optionalChains, metadata } = this.options
 
 		//@ts-ignore - strict type on chains vs optionalChains
 		const provider = await EthereumProvider.init({
 			projectId,
 			metadata,
 			optionalChains,
-			showQrModal: showQrModal ?? false,
-			qrModalOptions,
 		}).catch(catchError)
 
 		if (!provider) {
@@ -117,7 +109,7 @@ export class WalletConnect extends Injected {
 			else optionalChains = [Number(_chain?.chainId), ...optionalChains]
 		}
 
-		await (provider as EthereumProvider).connect?.({ optionalChains }).catch(catchError)
+		await (provider as Awaited<ReturnType<typeof EthereumProvider['init']>>).connect?.({ optionalChains }).catch(catchError)
 
 		const connected = await this.setAccountAndChainId(this.provider)
 		if (connected) {

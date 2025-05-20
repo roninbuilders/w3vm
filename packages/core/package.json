@@ -8,7 +8,7 @@
 		"dist"
 	],
 	"scripts": {
-		"watch": "tsc -w",
+		"watch": "tsup --watch",
 		"build": "tsup",
 		"upload": "pnpm run build && pnpm publish",
 		"clean": "rm -rf .turbo && rm -rf dist"

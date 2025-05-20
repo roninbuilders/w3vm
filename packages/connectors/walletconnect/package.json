@@ -7,17 +7,24 @@
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
-		"watch": "tsc -w",
+		"watch": "tsup --watch",
 		"build": "tsup",
 		"up": "pnpm add @walletconnect/ethereum-provider@latest @walletconnect/modal@latest",
 		"upload": "pnpm run build && pnpm publish",
 		"clean": "rm -rf .turbo && rm -rf dist"
 	},
 	"dependencies": {
-		"@walletconnect/ethereum-provider": "2.20.2",
-		"@walletconnect/modal": "2.7.0",
+		"@walletconnect/jsonrpc-types": "^1.0.4",
+		"@walletconnect/keyvaluestorage": "^1.1.1",
+		"@walletconnect/types": "^2.20.2",
+		"@walletconnect/universal-provider": "^2.20.2",
+		"@walletconnect/utils": "^2.20.2",
+		"eventemitter3": "^5.0.1",
+		"events": "^3.3.0",
 		"memomap": "^0.0.5"
 	},
 	"peerDependencies": {
@@ -29,7 +36,13 @@
 			"optional": true
 		}
 	},
-	"keywords": ["wallet", "eth", "ethereum", "walletconnect", "web3"],
+	"keywords": [
+		"wallet",
+		"eth",
+		"ethereum",
+		"walletconnect",
+		"web3"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/w3vm"

@@ -22,7 +22,7 @@ const metadata = {
   icons: ['https://avatars.githubusercontent.com/u/179229932']
 }
 const modal = createAppKit({
-  adapters: [],
+  adapters: [w3vmAdapter], 
   networks: [mainnet, arbitrum],
   metadata,
   projectId,
@@ -32,7 +32,6 @@ const modal = createAppKit({
 })
 
 function App() {
-
   return (
     <div>
       <h1>W3vm + AppKit</h1>
