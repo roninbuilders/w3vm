@@ -76,7 +76,10 @@ export class AuthConnector extends Injected {
     const parsedChainId = this.parseChainId(frameChainId)
     w3vmStore.set('address', address)
     w3vmStore.set('chainId', parsedChainId)
-    w3vmStore.set('walletProvider', provider as unknown as Provider)
+    w3vmStore.set('connectedWallet', {
+      provider: provider as unknown as Provider,
+      connectorId: this.id
+    })
 
     localStorage.setItem(_KEY_WALLET, this.id)
     this.addEvents(provider as unknown as Provider)

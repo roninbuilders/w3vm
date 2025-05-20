@@ -1,4 +1,5 @@
 import './App.css'
+import '@w3vm/ethers'
 import { createAppKit } from '@reown/appkit'
 import { W3vmAdapter } from '@w3vm/appkit-adapter'
 import { address, Injected } from '@w3vm/solid'

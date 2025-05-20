@@ -26,7 +26,7 @@ export async function getContractInstance({ abi, connector, contractAddress, wit
   if(withSigner){
     ethersProvider = getBrowserProvider()
   }else {
-    ethersProvider = getRpcProvider(chainId)
+    ethersProvider = getJsonRpcProvider(chainId)
   }
 
   const contractInstance = new Contract(contractAddress, abi as InterfaceAbi, ethersProvider)
@@ -59,7 +59,7 @@ export function getBrowserProvider(): BrowserProvider {
  * @param chainId - The chain ID to get the provider for
  * @returns JsonRpcProvider
  */
-export function getRpcProvider(chainId: number | string): JsonRpcProvider {
+export function getJsonRpcProvider(chainId: number | string): JsonRpcProvider {
   const chains = w3vmStore.get('chains')
   const chain = chains.find((chain) => Number(chain.chainId) === Number(chainId))
   if(!chain) {

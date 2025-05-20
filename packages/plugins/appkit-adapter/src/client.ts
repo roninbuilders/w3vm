@@ -386,8 +386,6 @@ export class W3vmAdapter extends AdapterBlueprint {
   public async getBalance(
     params: AdapterBlueprint.GetBalanceParams
   ): Promise<AdapterBlueprint.GetBalanceResult> {
-    const getBalance = w3vmQueriesStore.get('getBalance')
-
     const address = params.address
     const caipNetwork = this.getCaipNetworks().find(network => network.id === params.chainId)
 
@@ -410,17 +408,13 @@ export class W3vmAdapter extends AdapterBlueprint {
       this.balancePromises[caipAddress] = new Promise<AdapterBlueprint.GetBalanceResult>(
         async resolve => {
           try {
+            const getBalance = w3vmQueriesStore.get('getBalance')
             const chainId = params.chainId?.toString()
             const balance = await getBalance({
               address: params.address as string,
               chainId: chainId as string,
               token: params.tokens?.[caipNetwork.caipNetworkId]?.address as string
             })
-
-            //Remove this check once get balance is supported.
-            if(!balance.formatted){
-              return resolve({ balance: '0.00', symbol: 'ETH' })
-            }
 
             StorageUtil.updateNativeBalanceCache({
               caipAddress,
