@@ -29,11 +29,18 @@ interface W3Store {
 	/**
 	 * extended EIP-1193 provider of the connected wallet.
 	 */
-	walletProvider?: Provider
+	connectedWallet?: {
+		provider: Provider,
+		connectorId: string,
+	}
 	/**
 	 * Application's supported chains
 	 */
 	chains: Chain[]
+	/**
+	 * A map of contract instances, where the key is the contract address, the user address, the chain ID and the connector's ID.
+	 */
+	contractInstances: Map<string, ContractInstance>
 }
 
 export const w3vmStore = new Store<W3Store>({
@@ -43,6 +50,7 @@ export const w3vmStore = new Store<W3Store>({
 	defaultChain: undefined,
 	error: undefined,
 	connectors: [],
-	walletProvider: undefined,
-	chains: []
+	connectedWallet: undefined,
+	chains: [],
+	contractInstances: new Map(),
 })

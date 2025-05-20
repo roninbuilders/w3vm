@@ -82,7 +82,10 @@ export class WalletConnect extends Injected {
 			const connected = await this.setAccountAndChainId(provider as Provider)
 			if (connected) {
 				if (localStorage.getItem(KEY_WALLET) !== this.id) localStorage.setItem(KEY_WALLET, this.id)
-				w3vmStore.set('walletProvider', provider as Provider), w3vmStore.set('status', undefined)
+				w3vmStore.set('connectedWallet', {
+					provider: provider as Provider,
+					connectorId: this.id,
+				}), w3vmStore.set('status', undefined)
 				return
 			}
 		}
@@ -113,7 +116,10 @@ export class WalletConnect extends Injected {
 
 		const connected = await this.setAccountAndChainId(this.provider)
 		if (connected) {
-			w3vmStore.set('walletProvider', provider as Provider)
+			w3vmStore.set('connectedWallet', {
+					provider,
+					connectorId: this.id,
+				})
 			localStorage.setItem(KEY_WALLET, this.id)
 			this.addEvents(provider as Provider)
 		}
@@ -142,7 +148,7 @@ export class WalletConnect extends Injected {
 		if (typeof accounts[0] !== 'undefined') {
 			w3vmStore.set('address', accounts[0])
 		} else {
-			const walletProvider = w3vmStore.get('walletProvider')
+			const walletProvider = w3vmStore.get('connectedWallet')?.provider as Provider
 			if (walletProvider) this.removeEvents(walletProvider)
 			clearW3()
 		}

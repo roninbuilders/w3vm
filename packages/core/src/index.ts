@@ -1,5 +1,5 @@
 export { w3vmStore } from './store/w3store'
-export { w3vmQueriesStore } from './store/queries'
+export { w3vmQueriesStore, initQueriesStore } from './store/queries'
 
 export {
 	Injected,
@@ -22,7 +22,8 @@ export type {
 	ProviderRpcError,
 	Connector,
 	RequestArguments,
-	InitConfig
+	InitConfig,
+	Queries
 } from './types'
 
 export {

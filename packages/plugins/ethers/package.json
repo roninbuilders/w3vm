@@ -1,0 +1,35 @@
+{
+  "name": "@w3vm/ethers",
+  "version": "0.0.0",
+  "description": "Ethers.js plugin for W3vm",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "watch":"npx tsc --watch",
+    "up": "pnpm add @w3vm/core@latest",
+    "upload": "pnpm run build && npm publish --public",
+    "clean": "rm -rf .turbo && rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w3vm"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@w3vm/core": "workspace:*",
+    "ethers": ">=6.0.0",
+		"abitype": ">=1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "author": "glitch-txs",
+  "license": "MIT"
+}

@@ -207,7 +207,7 @@ export class W3vmAdapter extends AdapterBlueprint {
   async syncConnection(params: any): Promise<any>{
     const address = w3vmStore.get('address')
     const chainId = w3vmStore.get('chainId')
-    const provider = w3vmStore.get('walletProvider')
+    const provider = w3vmStore.get('connectedWallet')?.provider
     const connector = this.w3vmConnectors.find(c => c.id === params.id)
     return {
       address,
@@ -462,7 +462,7 @@ export class W3vmAdapter extends AdapterBlueprint {
   }
 
   public async getCapabilities(params: string) {
-    const provider = w3vmStore.get('walletProvider') as unknown as Awaited<ReturnType<typeof UniversalProvider['UniversalProvider']['init']>> 
+    const provider = w3vmStore.get('connectedWallet')?.provider as unknown as Awaited<ReturnType<typeof UniversalProvider['UniversalProvider']['init']>> 
 
     if (!provider) {
       throw new Error('connectionControllerClient:getCapabilities - provider is undefined')
@@ -481,7 +481,7 @@ export class W3vmAdapter extends AdapterBlueprint {
   }
 
   public async grantPermissions(params: AdapterBlueprint.GrantPermissionsParams) {
-    const provider = w3vmStore.get('walletProvider')
+    const provider = w3vmStore.get('connectedWallet')?.provider
 
     if (!provider) {
       throw new Error('connectionControllerClient:grantPermissions - provider is undefined')
@@ -493,7 +493,7 @@ export class W3vmAdapter extends AdapterBlueprint {
   public async revokePermissions(
     params: AdapterBlueprint.RevokePermissionsParams
   ): Promise<`0x${string}`> {
-    const provider = w3vmStore.get('walletProvider')
+    const provider = w3vmStore.get('connectedWallet')?.provider
 
     if (!provider) {
       throw new Error('connectionControllerClient:revokePermissions - provider is undefined')
@@ -505,7 +505,7 @@ export class W3vmAdapter extends AdapterBlueprint {
   public async walletGetAssets(
     params: AdapterBlueprint.WalletGetAssetsParams
   ): Promise<AdapterBlueprint.WalletGetAssetsResponse> {
-    const provider = w3vmStore.get('walletProvider')
+    const provider = w3vmStore.get('connectedWallet')?.provider
 
     if (!provider) {
       throw new Error('connectionControllerClient:walletGetAssets - provider is undefined')

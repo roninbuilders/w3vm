@@ -167,9 +167,19 @@ export type WatchPendingTransactions = (params: {
   onTransactions: (hashes: string[]) => void
 }) => () => void
 
+export type Queries = {
+  ['WriteContractQuery']: WriteContractQuery,
+  ['ReadContractQuery']: ReadContractQuery,
+  ['WatchContractEvent']: WatchContractEvent,
+  ['WatchPendingTransactions']: WatchPendingTransactions,
+  ['SignMessage']: SignMessage,
+  ['SendTransaction']: SendTransaction,
+  ['EstimateGas']: EstimateGas,
+  ['GetBalance']: GetBalance,
+  ['WaitForTransactionReceipt']: WaitForTransactionReceipt,
+}
 /** Global */
 
 declare global {
-	interface W3vmSigner {}
-	interface W3vmClient {}
+  interface ContractInstance {}
 }

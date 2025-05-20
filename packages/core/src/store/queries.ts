@@ -2,7 +2,6 @@ import { Store } from "memomap";
 import { EstimateGas, GetBalance, ReadContractQuery, SendTransaction, SignMessage, WaitForTransactionReceipt, WatchContractEvent, WatchPendingTransactions, WriteContractQuery } from "../types";
 
 type W3vmQueriesStore = {
-  signerOrClient: W3vmSigner | W3vmClient | undefined
   writeContract: WriteContractQuery
   readContract: ReadContractQuery
   watchContractEvent: WatchContractEvent
@@ -15,7 +14,6 @@ type W3vmQueriesStore = {
 }
 
 export const w3vmQueriesStore = new Store<W3vmQueriesStore>({
-  signerOrClient: undefined,
   writeContract: async()=>({} as ReturnType<WriteContractQuery>),
   readContract: async()=>({} as ReturnType<ReadContractQuery>),
   watchContractEvent: ()=>({} as ReturnType<WatchContractEvent>),
@@ -26,3 +24,15 @@ export const w3vmQueriesStore = new Store<W3vmQueriesStore>({
   getBalance: async()=>({} as ReturnType<GetBalance>),
   waitForTransactionReceipt: async()=>({} as ReturnType<WaitForTransactionReceipt>),
 })
+
+export const initQueriesStore = (signerOrClient: W3vmQueriesStore) => {
+  w3vmQueriesStore.set('writeContract', signerOrClient.writeContract)
+  w3vmQueriesStore.set('readContract', signerOrClient.readContract)
+  w3vmQueriesStore.set('watchContractEvent', signerOrClient.watchContractEvent)
+  w3vmQueriesStore.set('watchPendingTransactions', signerOrClient.watchPendingTransactions)
+  w3vmQueriesStore.set('signMessage', signerOrClient.signMessage)
+  w3vmQueriesStore.set('sendTransaction', signerOrClient.sendTransaction)
+  w3vmQueriesStore.set('estimateGas', signerOrClient.estimateGas)
+  w3vmQueriesStore.set('getBalance', signerOrClient.getBalance)
+  w3vmQueriesStore.set('waitForTransactionReceipt', signerOrClient.waitForTransactionReceipt)
+}

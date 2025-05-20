@@ -3,7 +3,7 @@ import { Chain } from '../types'
 import { catchError } from '../utils'
 
 export async function switchChain({ chain }: { chain: number | Chain }) {
-	const provider = w3vmStore.get('walletProvider')
+	const provider = w3vmStore.get('connectedWallet')?.provider
 	if (!provider) {
 		catchError(new Error('While calling switchChain Provider was undefined'))
 		return

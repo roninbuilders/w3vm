@@ -46,7 +46,7 @@ export class Injected {
 			const connected = await this.setAccountAndChainId(provider)
 			if (connected) {
 				this.addEvents(provider)
-				w3vmStore.set('walletProvider', provider)
+				w3vmStore.set('connectedWallet', { provider, connectorId: this.id })
 			} else {
 				window?.localStorage.removeItem(KEY_WALLET)
 			}
@@ -71,7 +71,7 @@ export class Injected {
 				window?.localStorage.setItem(KEY_WALLET, this.id)
 
 				/* Save address, chain and provider - initialize event listeners */
-				w3vmStore.set('address', accounts[0]), w3vmStore.set('walletProvider', provider)
+				w3vmStore.set('address', accounts[0]), w3vmStore.set('connectedWallet', { provider, connectorId: this.id })
 				await this.setChainId(provider), this.addEvents(provider)
 
 				const defaultChain = w3vmStore.get('defaultChain')
@@ -86,7 +86,7 @@ export class Injected {
 	}
 
 	async disconnect() {
-		const walletProvider = w3vmStore.get('walletProvider')
+		const walletProvider = w3vmStore.get('connectedWallet')?.provider
 		if (walletProvider) this.removeEvents(walletProvider)
 		if (walletProvider?.disconnect) walletProvider.disconnect()
 		clearW3()
@@ -146,7 +146,7 @@ export class Injected {
 		if (typeof accounts[0] !== 'undefined') {
 			w3vmStore.set('address', accounts[0])
 		} else {
-			const walletProvider = w3vmStore.get('walletProvider') as Provider // TODO
+			const walletProvider = w3vmStore.get('connectedWallet')?.provider as Provider // TODO
 			if (walletProvider) this.removeEvents(walletProvider)
 			clearW3()
 		}

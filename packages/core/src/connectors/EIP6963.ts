@@ -27,7 +27,10 @@ export class EIP6963Connector extends Injected {
 			const connected = await this.setAccountAndChainId(provider)
 			if (connected) {
 				this.addEvents(provider)
-				w3vmStore.set('walletProvider', provider)
+				w3vmStore.set('connectedWallet', {
+					provider,
+					connectorId: this.id,
+				})
 			} else {
 				window?.localStorage.removeItem(KEY_WALLET)
 			}
