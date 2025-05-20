@@ -1,12 +1,9 @@
-import type { Connector } from "@w3vm/core";
 import type { Abi } from "abitype";
 import { Contract } from "ethers";
 
 export type GetContractInstanceOptions = { 
   abi: Abi,
-  connector: Connector, 
-  contractAddress: string, 
-  withSigner: boolean,
+  contractAddress: string,
   chainId: string
 }
 

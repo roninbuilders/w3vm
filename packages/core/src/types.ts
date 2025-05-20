@@ -82,7 +82,6 @@ export type Connector = Injected
 
 
 /**Queries Store */
-
 export type WriteContractQuery = <
   TAbi extends Abi,
   TFunctionName extends ExtractAbiFunctionNames<TAbi, 'nonpayable' | 'payable'>
@@ -121,18 +120,18 @@ export type WatchContractEvent = <
 ) => () => void
 
 export type SendTransaction = (params: {
-  account: string
+  address: string
   to: string
   value: bigint
 }) => Promise<string> 
 
 export type SignMessage = (params: {
-  account: string
+  address: string
   message: string | Uint8Array
 }) => Promise<string>
 
 export type EstimateGas = (params: {
-  account?: string
+  address?: string
   to?: string
   value?: bigint
   data?: string
