@@ -386,6 +386,8 @@ export class W3vmAdapter extends AdapterBlueprint {
   public async getBalance(
     params: AdapterBlueprint.GetBalanceParams
   ): Promise<AdapterBlueprint.GetBalanceResult> {
+    const getBalance = w3vmQueriesStore.get('getBalance')
+
     const address = params.address
     const caipNetwork = this.getCaipNetworks().find(network => network.id === params.chainId)
 
@@ -405,8 +407,6 @@ export class W3vmAdapter extends AdapterBlueprint {
         return { balance: cachedBalance.balance, symbol: cachedBalance.symbol }
       }
 
-      const getBalance = w3vmQueriesStore.get('getBalance')
-
       this.balancePromises[caipAddress] = new Promise<AdapterBlueprint.GetBalanceResult>(
         async resolve => {
           try {
@@ -416,6 +416,11 @@ export class W3vmAdapter extends AdapterBlueprint {
               chainId: chainId as string,
               token: params.tokens?.[caipNetwork.caipNetworkId]?.address as string
             })
+
+            //Remove this check once get balance is supported.
+            if(!balance.formatted){
+              return resolve({ balance: '0.00', symbol: 'ETH' })
+            }
 
             StorageUtil.updateNativeBalanceCache({
               caipAddress,
@@ -509,16 +514,16 @@ export class W3vmAdapter extends AdapterBlueprint {
     return provider.request({ method: 'wallet_getAssets', params: [params] })
   }
 
-  public override setUniversalProvider(universalProvider: Awaited<ReturnType<typeof UniversalProvider['UniversalProvider']['init']>> ): void {
-    universalProvider.on('display_uri', console.log)
-    universalProvider.on('connect', () => {
-      const connector = this.connectors.find(c => c.id === 'walletConnect') as unknown as Connector
-      if (connector) {
-        connectW3({
-          connector
-        })
-      }
+  public override async setUniversalProvider(universalProvider: Awaited<ReturnType<typeof UniversalProvider['UniversalProvider']['init']>> ): Promise<void> {
+
+    const connector = this.w3vmConnectors.find(c => c.id === 'walletConnect') as unknown as Connector
+    const provider = await connector?.getProvider()
+    provider?.on('display_uri', (uri: string)=>{
+      console.log('display_uri', uri)
+      universalProvider.events.emit('connect')
+      universalProvider.events.emit('display_uri', uri)
     })
+
     this.addConnector(
       new WalletConnectConnector({
         provider: universalProvider,

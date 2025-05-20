@@ -1,7 +1,7 @@
 import './App.css'
 import { createAppKit } from '@reown/appkit'
 import { W3vmAdapter } from '@w3vm/appkit-adapter'
-import { Injected } from '@w3vm/solid'
+import { address, Injected } from '@w3vm/solid'
 import { WalletConnect } from '@w3vm/walletconnect'
 import { arbitrum, mainnet } from '@reown/appkit/networks'
 
@@ -38,6 +38,7 @@ function App() {
         <button onClick={()=>modal.open()}>
           Open Modal
         </button>
+        address: {address()}
         <appkit-button />
         <appkit-network-button />
     </div>
