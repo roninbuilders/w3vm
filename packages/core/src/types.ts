@@ -4,8 +4,6 @@ import type {
   ExtractAbiFunctionNames,
   ExtractAbiFunction,
   AbiParametersToPrimitiveTypes,
-	ExtractAbiEventNames,
-	ExtractAbiEvent,
 } from 'abitype'
 
 export type InitConfig = { connectors: Connector[]; defaultChain?: Chain | number; SSR?: Boolean, chains: Chain[] }
@@ -104,23 +102,8 @@ export type ReadContractQuery = <
   args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
 }) => Promise<AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['outputs']>[0]>
 
-export type WatchContractEvent = <
-  TAbi extends Abi,
-  TEventName extends ExtractAbiEventNames<TAbi>
->(
-  config: {
-    address: string
-    abi: TAbi
-    eventName: TEventName
-    onLogs: (logs: {
-      eventName: TEventName
-      args: AbiParametersToPrimitiveTypes<ExtractAbiEvent<TAbi, TEventName>['inputs']>
-    }[]) => void
-  }
-) => () => void
-
 export type SendTransaction = (params: {
-  address: string
+  from: string
   to: string
   value: bigint
 }) => Promise<string> 
@@ -131,7 +114,8 @@ export type SignMessage = (params: {
 }) => Promise<string>
 
 export type EstimateGas = (params: {
-  address?: string
+  chainId: string
+  from?: string
   to?: string
   value?: bigint
   data?: string
@@ -160,17 +144,9 @@ export type WaitForTransactionReceipt = (params: {
   // include any additional fields like above
 }>
 
-export type WatchPendingTransactions = (params: {
-  pollingInterval?: number | undefined
-  onError?: (error: Error)=>void
-  onTransactions: (hashes: string[]) => void
-}) => () => void
-
 export type Queries = {
   ['WriteContractQuery']: WriteContractQuery,
   ['ReadContractQuery']: ReadContractQuery,
-  ['WatchContractEvent']: WatchContractEvent,
-  ['WatchPendingTransactions']: WatchPendingTransactions,
   ['SignMessage']: SignMessage,
   ['SendTransaction']: SendTransaction,
   ['EstimateGas']: EstimateGas,

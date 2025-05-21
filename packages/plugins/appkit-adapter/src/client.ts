@@ -16,36 +16,23 @@ import {
 import { CaipNetworksUtil, PresetsUtil } from '@reown/appkit-utils'
 import { AdapterBlueprint } from '@reown/appkit/adapters'
 
-import { LimitterUtil } from './utils/LimitterUtil.js'
 import { parseWalletCapabilities } from './utils/helpers.js'
 import { formatUnits, parseUnits } from 'viem'
 import { WalletConnectConnector } from '@reown/appkit/connectors'
 import { AuthConnector } from './connectors/AuthConnector.js'
 
-interface PendingTransactionsFilter {
-  enable: boolean
-  pollingInterval?: number
-}
 
 // --- Constants ---------------------------------------------------- //
-const DEFAULT_PENDING_TRANSACTIONS_FILTER = {
-  enable: false,
-  pollingInterval: 30_000
-}
-
 export class W3vmAdapter extends AdapterBlueprint {
   public w3vmChains: Chain[] | undefined
   public w3vmConfig: ReturnType<typeof initW3> | undefined
   public w3vmConnectors: Connector[]
 
-  private pendingTransactionsFilter: PendingTransactionsFilter
-  private unwatchPendingTransactions: (() => void) | undefined
   private balancePromises: Record<string, Promise<AdapterBlueprint.GetBalanceResult>> = {}
 
   constructor(
     configParams: Omit<InitConfig, 'chains'> & {
       networks: AppKitNetwork[]
-      pendingTransactionsFilter?: PendingTransactionsFilter
       projectId: string
       customRpcUrls?: CustomRpcUrlMap
       isEmail?: boolean
@@ -63,11 +50,6 @@ export class W3vmAdapter extends AdapterBlueprint {
     this.namespace = CommonConstantsUtil.CHAIN.EVM
     this.adapterType = "w3vm"
     this.projectId = configParams.projectId
-
-    this.pendingTransactionsFilter = {
-      ...DEFAULT_PENDING_TRANSACTIONS_FILTER,
-      ...(configParams.pendingTransactionsFilter ?? {})
-    }
 
     this.createConfig({ ...configParams, networks })
   }
@@ -141,7 +123,6 @@ export class W3vmAdapter extends AdapterBlueprint {
   private setupWatchers() {
     w3vmStore.subscribe('address', (address)=>{
       if(address){
-        this.setupWatchPendingTransactions()
         this.emit('accountChanged', {
           address: address,
           chainId: w3vmStore.get('chainId')
@@ -218,30 +199,6 @@ export class W3vmAdapter extends AdapterBlueprint {
     }
   }
 
-  private setupWatchPendingTransactions() {
-    if (!this.pendingTransactionsFilter.enable || this.unwatchPendingTransactions) {
-      return
-    }
-    const watchPendingTransactions = w3vmQueriesStore.get('watchPendingTransactions')
-    this.unwatchPendingTransactions = watchPendingTransactions({
-      pollingInterval: this.pendingTransactionsFilter.pollingInterval,
-      /* Magic RPC does not support the pending transactions. We handle transaction for the AuthConnector cases in AppKit client to handle all clients at once. Adding the onError handler to avoid the error to throw. */
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      onError: () => {},
-      onTransactions: () => {
-        this.emit('pendingTransactions')
-        LimitterUtil.increase('pendingTransactions')
-      }
-    })
-
-    const unsubscribe = LimitterUtil.subscribeKey('pendingTransactions', val => {
-      if (val >= CommonConstantsUtil.LIMITS.PENDING_TRANSACTIONS) {
-        this.unwatchPendingTransactions?.()
-        unsubscribe()
-      }
-    })
-  }
-
   public async signMessage(
     params: AdapterBlueprint.SignMessageParams
   ): Promise<AdapterBlueprint.SignMessageResult> {
@@ -249,7 +206,7 @@ export class W3vmAdapter extends AdapterBlueprint {
       const signMessage = w3vmQueriesStore.get('signMessage')
       const signature = await signMessage({
         message: params.message,
-        account: params.address
+        address: params.address
       })
 
       return { signature }
@@ -266,7 +223,7 @@ export class W3vmAdapter extends AdapterBlueprint {
     const sendTransaction = w3vmQueriesStore.get('sendTransaction')
     const waitForTransactionReceipt = w3vmQueriesStore.get('waitForTransactionReceipt')
     const txParams = {
-      account: address as string,
+      from: address as string,
       to: params.to,
       value: Number.isNaN(Number(params.value)) ? BigInt(0) : BigInt(params.value),
       gas: params.gas ? BigInt(params.gas) : undefined,
@@ -306,7 +263,8 @@ export class W3vmAdapter extends AdapterBlueprint {
     try {
       const estimateGas = w3vmQueriesStore.get('estimateGas')
       const result = await estimateGas({
-        account: params.address as string,
+        chainId: params.caipNetwork.id.toString(),
+        from: params.address as string,
         to: params.to as string,
         data: params.data as string,
       })
