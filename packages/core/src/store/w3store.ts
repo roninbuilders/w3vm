@@ -30,8 +30,8 @@ interface W3Store {
 	 * extended EIP-1193 provider of the connected wallet.
 	 */
 	connectedWallet?: {
-		provider: Provider,
-		connectorId: string,
+		provider: Provider
+		connectorId: string
 	}
 	/**
 	 * Application's supported chains

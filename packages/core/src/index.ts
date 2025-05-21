@@ -23,7 +23,7 @@ export type {
 	Connector,
 	RequestArguments,
 	InitConfig,
-	Queries
+	Queries,
 } from './types'
 
 export {

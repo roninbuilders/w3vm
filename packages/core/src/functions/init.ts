@@ -16,14 +16,9 @@ export function initEIP6963() {
 }
 
 /* Init Function */
-export function initW3({
-	connectors,
-	defaultChain,
-	SSR,
-	chains
-}: InitConfig) {
+export function initW3({ connectors, defaultChain, SSR, chains }: InitConfig) {
 	if (typeof window === 'undefined') return
-	
+
 	w3vmStore.set('defaultChain', defaultChain)
 	w3vmStore.set('connectors', connectors)
 	w3vmStore.set('chains', chains)

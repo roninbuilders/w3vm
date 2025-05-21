@@ -1,14 +1,14 @@
-import type { Abi } from "abitype";
-import { Contract } from "ethers";
+import type { Abi } from 'abitype'
+import { Contract } from 'ethers'
 
-export type GetContractInstanceOptions = { 
-  abi: Abi,
-  contractAddress: string,
-  chainId: string
+export type GetContractInstanceOptions = {
+	abi: Abi
+	contractAddress: string
+	chainId: string
 }
 
-type EthersContractInstance = InstanceType<typeof Contract>;
+type EthersContractInstance = InstanceType<typeof Contract>
 
 declare global {
-  interface ContractInstance extends EthersContractInstance {}
+	interface ContractInstance extends EthersContractInstance {}
 }

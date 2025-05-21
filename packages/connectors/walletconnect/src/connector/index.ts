@@ -85,7 +85,8 @@ export class WalletConnect extends Injected {
 				w3vmStore.set('connectedWallet', {
 					provider: provider as Provider,
 					connectorId: this.id,
-				}), w3vmStore.set('status', undefined)
+				}),
+					w3vmStore.set('status', undefined)
 				return
 			}
 		}
@@ -112,14 +113,16 @@ export class WalletConnect extends Injected {
 			else optionalChains = [Number(_chain?.chainId), ...optionalChains]
 		}
 
-		await (provider as Awaited<ReturnType<typeof EthereumProvider['init']>>).connect?.({ optionalChains }).catch(catchError)
+		await (provider as Awaited<ReturnType<(typeof EthereumProvider)['init']>>)
+			.connect?.({ optionalChains })
+			.catch(catchError)
 
 		const connected = await this.setAccountAndChainId(this.provider)
 		if (connected) {
 			w3vmStore.set('connectedWallet', {
-					provider,
-					connectorId: this.id,
-				})
+				provider,
+				connectorId: this.id,
+			})
 			localStorage.setItem(KEY_WALLET, this.id)
 			this.addEvents(provider as Provider)
 		}

@@ -3,33 +3,33 @@ import { subscribeKey as subKey } from 'valtio/vanilla/utils'
 
 // -- Types --------------------------------------------- //
 export interface LimitteStoreUtilState {
-  pendingTransactions: number
+	pendingTransactions: number
 }
 
 type StateKey = keyof LimitteStoreUtilState
 
 // -- State --------------------------------------------- //
 const state = proxy<LimitteStoreUtilState>({
-  pendingTransactions: 0
+	pendingTransactions: 0,
 })
 
 // -- Controller ---------------------------------------- //
 export const LimitterUtil = {
-  state,
+	state,
 
-  subscribeKey<K extends StateKey>(key: K, callback: (value: LimitteStoreUtilState[K]) => void) {
-    return subKey(state, key, callback)
-  },
+	subscribeKey<K extends StateKey>(key: K, callback: (value: LimitteStoreUtilState[K]) => void) {
+		return subKey(state, key, callback)
+	},
 
-  increase(value: StateKey) {
-    state[value] += 1
-  },
+	increase(value: StateKey) {
+		state[value] += 1
+	},
 
-  decrease(value: StateKey) {
-    state[value] -= 1
-  },
+	decrease(value: StateKey) {
+		state[value] -= 1
+	},
 
-  reset(value: StateKey) {
-    state[value] = 0
-  }
+	reset(value: StateKey) {
+		state[value] = 0
+	},
 }
