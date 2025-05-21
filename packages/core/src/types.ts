@@ -78,7 +78,7 @@ export type WriteContractQuery = <
 	TAbi extends Abi,
 	TFunctionName extends ExtractAbiFunctionNames<TAbi, 'nonpayable' | 'payable'>,
 >(params: {
-	chain?: Chain
+	chainId?: string
 	address: string
 	abi: TAbi
 	functionName: TFunctionName
@@ -89,14 +89,15 @@ export type ReadContractQuery = <
 	TAbi extends Abi,
 	TFunctionName extends ExtractAbiFunctionNames<TAbi, 'view' | 'pure'>,
 >(params: {
-	chain?: Chain
+	chainId?: string
 	address: string
 	abi: TAbi
 	functionName: TFunctionName
 	args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
-}) => Promise<AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['outputs']>[0]>
+}) => Promise<unknown>
 
 export type SendTransaction = (params: {
+	chainId?: string
 	from: string
 	to: string
 	value: bigint
@@ -108,7 +109,7 @@ export type SignMessage = (params: {
 }) => Promise<string>
 
 export type EstimateGas = (params: {
-	chainId: string
+	chainId?: string
 	from?: string
 	to?: string
 	value?: bigint
@@ -126,6 +127,7 @@ export type GetBalance = (params: {
 }>
 
 export type WaitForTransactionReceipt = (params: {
+	chainId?: string
 	hash: string
 	timeout?: number
 }) => Promise<{
@@ -146,9 +148,4 @@ export type Queries = {
 	['EstimateGas']: EstimateGas
 	['GetBalance']: GetBalance
 	['WaitForTransactionReceipt']: WaitForTransactionReceipt
-}
-/** Global */
-
-declare global {
-	interface ContractInstance {}
 }

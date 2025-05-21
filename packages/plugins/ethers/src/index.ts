@@ -1,5 +1,5 @@
 import { initQueriesStore, w3vmStore } from '@w3vm/core'
-import { createEthersHelpers } from './utils/index.js'
+import { createEthersHelpers } from './helpers/index.js'
 import { formatEther } from 'ethers'
 
 export function initEthers() {
@@ -13,7 +13,7 @@ export function initEthers() {
 			}
 
 			//TODO: Check for correct chainId
-			const chainId = params.chain?.chainId || w3vmStore.get('chainId')
+			const chainId = params.chainId || w3vmStore.get('chainId')
 			if (!chainId) {
 				throw new Error('Ethers readContract internal: ChainId not found')
 			}
@@ -30,7 +30,7 @@ export function initEthers() {
 			return res
 		},
 		readContract: async (params) => {
-			const chainId = params.chain?.chainId
+			const chainId = params.chainId
 			if (!chainId) {
 				throw new Error('Ethers readContract internal: ChainId not found')
 			}
@@ -70,7 +70,11 @@ export function initEthers() {
 			})
 			return tx.hash
 		},
-		estimateGas: async ({ from, to, value, data, chainId }) => {
+		estimateGas: async ({ from, to, value, data, chainId: _chainId }) => {
+			const chainId = _chainId || w3vmStore.get('chainId')
+			if (!chainId) {
+				throw new Error('Ethers readContract internal: ChainId not found')
+			}
 			const provider = helpers.getFallbackRpcProvider(chainId)
 			const gas = await provider.estimateGas({
 				from,

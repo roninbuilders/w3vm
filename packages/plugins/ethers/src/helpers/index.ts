@@ -10,18 +10,21 @@ export function createEthersHelpers() {
 	// Initialize the store for contract instances
 	const browserProviders = new Map<string, BrowserProvider>()
 	const fallbackRpcProviders = new Map<string, FallbackProvider | JsonRpcProvider>()
+	const contractInstances = new Map<string, Contract>()
 
 	/**
 	 * Get the contract instance
 	 * @param options - The options to get the contract instance
 	 * @returns ContractInstance
 	 */
-	function getContractInstance({ abi, contractAddress, chainId }: GetContractInstanceOptions): ContractInstance {
-		const contractInstances = w3vmStore.get('contractInstances')
-
+	function getContractInstance({
+		abi,
+		contractAddress,
+		chainId,
+	}: GetContractInstanceOptions): InstanceType<typeof Contract> {
 		const contractKey = JSON.stringify({ contractAddress, chainId })
 		if (contractInstances.has(contractKey)) {
-			return contractInstances.get(contractKey) as ContractInstance
+			return contractInstances.get(contractKey) as InstanceType<typeof Contract>
 		}
 
 		const ethersProvider = getFallbackRpcProvider(chainId)
@@ -40,8 +43,7 @@ export function createEthersHelpers() {
 		abi,
 		contractAddress,
 		chainId,
-	}: GetContractInstanceOptions): ContractInstance {
-		const contractInstances = w3vmStore.get('contractInstances')
+	}: GetContractInstanceOptions): InstanceType<typeof Contract> {
 		const connectedWallet = w3vmStore.get('connectedWallet')
 		const userAddress = w3vmStore.get('address')
 		if (!connectedWallet) {
@@ -55,7 +57,7 @@ export function createEthersHelpers() {
 			address: userAddress,
 		})
 		if (contractInstances.has(contractKey)) {
-			return contractInstances.get(contractKey) as ContractInstance
+			return contractInstances.get(contractKey) as InstanceType<typeof Contract>
 		}
 
 		const ethersProvider = getBrowserProvider()

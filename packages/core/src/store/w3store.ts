@@ -37,10 +37,6 @@ interface W3Store {
 	 * Application's supported chains
 	 */
 	chains: Chain[]
-	/**
-	 * A map of contract instances, where the key is the contract address, the user address, the chain ID and the connector's ID.
-	 */
-	contractInstances: Map<string, ContractInstance>
 }
 
 export const w3vmStore = new Store<W3Store>({
@@ -52,5 +48,4 @@ export const w3vmStore = new Store<W3Store>({
 	connectors: [],
 	connectedWallet: undefined,
 	chains: [],
-	contractInstances: new Map(),
 })
