@@ -1,23 +1,26 @@
-import { MutateOptions, useMutation } from "@tanstack/solid-query"
-import { Connector, connectW3 } from "@w3vm/core"
-import { createEffect } from "solid-js"
+import { SolidMutationOptions, useMutation } from "@tanstack/solid-query"
+import { type Connector, connectW3 } from "@w3vm/core"
+import { createEffect, createMemo } from "solid-js"
 import { address } from "../signals/address"
 
-export function createConnect(){
+export function useConnect(mutationOptions?: ()=> Omit<SolidMutationOptions, 'mutationFn'>){
   const mutation = useMutation(()=>({
+      ...(mutationOptions?.() || {}),
       mutationFn: (connector: unknown)=> connectW3({ connector: connector as unknown as Connector })
     })
   )
-  
+
   createEffect(()=>{
-  //Reset mutation when wallet is disconnected.
+    //Reset mutation when wallet is disconnected.
     if(!address()){
       mutation.reset()
     }
   })
-
-  return {
+    
+  const connectResult = createMemo(() => ({
     ...mutation,
-    connect: mutation.mutate as (connector: Connector, options?: MutateOptions) => Promise<void>
-  }
+    connect: mutation.mutate
+  }))
+  
+  return connectResult
 }

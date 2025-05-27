@@ -85,15 +85,9 @@ importers:
 
   examples/solid:
     dependencies:
-      '@w3vm/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@w3vm/solid':
-        specifier: workspace:*
-        version: link:../../packages/solid
-      '@w3vm/walletconnect':
-        specifier: workspace:*
-        version: link:../../packages/connectors/walletconnect
+      '@tanstack/solid-query':
+        specifier: ^5.77.2
+        version: 5.77.2(solid-js@1.9.6)
       solid-js:
         specifier: ^1.8.7
         version: 1.9.6
