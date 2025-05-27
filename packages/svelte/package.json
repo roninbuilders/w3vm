@@ -27,6 +27,7 @@
 	},
 	"peerDependencies": {
 		"@w3vm/core": "workspace:*",
+		"@tanstack/svelte-query": ">=5",
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {

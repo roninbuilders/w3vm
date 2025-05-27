@@ -17,6 +17,7 @@
 	"peerDependencies": {
 		"solid-js": ">=1",
 		"typescript": ">=5",
+		"@tanstack/solid-query": ">=5",
 		"@w3vm/core": "workspace:*"
 	},
 	"peerDependenciesMeta": {
