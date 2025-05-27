@@ -1,9 +1,10 @@
 import { Abi, BlockTag, erc20Abi, formatUnits, SignableMessage } from 'viem'
 import { initQueriesStore, w3vmStore } from '@w3vm/core'
 import { createViemHelpers } from './helpers/index.js'
+import { Transports } from './types.js'
 
-export function initViem() {
-	const helpers = createViemHelpers()
+export function initViem({ transports }: { transports: Transports }) {
+	const helpers = createViemHelpers({ transports })
 
 	initQueriesStore({
 		writeContract: async (params): Promise<`0x${string}`> => {

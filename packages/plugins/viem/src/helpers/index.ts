@@ -1,8 +1,9 @@
 import { w3vmStore } from '@w3vm/core'
-import { createPublicClient, createWalletClient, custom, http } from 'viem'
+import { createPublicClient, createWalletClient, custom } from 'viem'
 import { Chain, PublicClient, WalletClient } from 'viem'
+import { Transports } from '../types.js'
 
-export function createViemHelpers() {
+export function createViemHelpers({ transports }: { transports: Transports }) {
 	const publicClients = new Map<string, PublicClient>()
 	const walletClients = new Map<string, WalletClient>()
 
@@ -16,7 +17,10 @@ export function createViemHelpers() {
 		}
 
 		const chain = getChainOrThrow(chainId)
-		const transport = http(chain.rpcUrls.default.http[0])
+		const transport = transports[chain.id]
+		if(!transport){
+			throw new Error(`Transport for chain ${chain.id} not found`)
+		}
 		const publicClient = createPublicClient({ chain, transport })
 
 		publicClients.set(id, publicClient)
