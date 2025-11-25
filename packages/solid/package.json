@@ -33,8 +33,10 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"devDependencies": {
-		"tsup": "^6.7.0",
-		"@w3vm/core": "workspace:*"
-	}
+        "devDependencies": {
+                "@tanstack/solid-query": "^5.77.2",
+                "solid-js": "^1.8.7",
+                "tsup": "^6.7.0",
+                "@w3vm/core": "workspace:*"
+        }
 }
