@@ -1,22 +1,19 @@
-export { error } from './signals/error'
 export { address } from './signals/address'
 export { chainId } from './signals/chain'
-export { walletProvider } from './signals/provider'
-export { status } from './signals/status'
 export { connectors } from './signals/connectors'
+export { error } from './signals/error'
+export { status } from './signals/status'
+export { walletProvider } from './signals/provider'
+
+export { connectW3, disconnectW3, initEIP6963, initW3, Injected, w3vmStore } from '@w3vm/core'
+export type { Chain, EIP1193Provider, Provider, ProviderRpcError } from '@w3vm/core'
 
 export {
-	w3vmStore,
-	Injected,
-	initEIP6963,
-	initW3,
-	connectW3,
-	disconnectW3,
-} from '@w3vm/core'
-
-export type {
-	Chain,
-	Provider,
-	EIP1193Provider,
-	ProviderRpcError,
-} from '@w3vm/core'
+        useConnect,
+        useReadContract,
+        useSendTransaction,
+        useSignMessage,
+        useSwitchChain,
+        useWaitForTransactionReceipt,
+        useWriteContract,
+} from './queries'
