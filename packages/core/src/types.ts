@@ -1,4 +1,7 @@
 import { Injected } from './connectors'
+import type { Abi, ExtractAbiFunctionNames, ExtractAbiFunction, AbiParametersToPrimitiveTypes } from 'abitype'
+
+export type InitConfig = { connectors: Connector[]; defaultChain?: Chain | number; SSR?: Boolean; chains: Chain[] }
 
 /* EIP-3085 */
 export interface Chain {
@@ -69,3 +72,80 @@ export interface Provider extends EIP1193Provider {
 
 /* W3 */
 export type Connector = Injected
+
+/**Queries Store */
+export type WriteContractQuery = <
+	TAbi extends Abi,
+	TFunctionName extends ExtractAbiFunctionNames<TAbi, 'nonpayable' | 'payable'>,
+>(params: {
+	chainId?: string
+	address: string
+	abi: TAbi
+	functionName: TFunctionName
+	args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
+}) => Promise<string>
+
+export type ReadContractQuery = <
+	TAbi extends Abi,
+	TFunctionName extends ExtractAbiFunctionNames<TAbi, 'view' | 'pure'>,
+>(params: {
+	chainId?: string
+	address: string
+	abi: TAbi
+	functionName: TFunctionName
+	args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<TAbi, TFunctionName>['inputs']>
+}) => Promise<unknown>
+
+export type SendTransaction = (params: {
+	chainId?: string
+	from: string
+	to: string
+	value: bigint
+}) => Promise<string>
+
+export type SignMessage = (params: {
+	address: string
+	message: string | Uint8Array
+}) => Promise<string>
+
+export type EstimateGas = (params: {
+	chainId?: string
+	from?: string
+	to?: string
+	value?: bigint
+	data?: string
+}) => Promise<bigint>
+
+export type GetBalance = (params: {
+	address: string
+	chainId: string
+	token: string
+	blockTag?: 'latest' | 'earliest' | 'pending' | bigint // optional block
+}) => Promise<{
+	formatted: string
+	symbol: string
+}>
+
+export type WaitForTransactionReceipt = (params: {
+	chainId?: string
+	hash: string
+	timeout?: number
+}) => Promise<{
+	blockHash: string
+	blockNumber: bigint
+	from: string
+	to?: string
+	status: 'success' | 'reverted'
+	transactionHash: string
+	// include any additional fields like above
+}>
+
+export type Queries = {
+	['WriteContractQuery']: WriteContractQuery
+	['ReadContractQuery']: ReadContractQuery
+	['SignMessage']: SignMessage
+	['SendTransaction']: SendTransaction
+	['EstimateGas']: EstimateGas
+	['GetBalance']: GetBalance
+	['WaitForTransactionReceipt']: WaitForTransactionReceipt
+}

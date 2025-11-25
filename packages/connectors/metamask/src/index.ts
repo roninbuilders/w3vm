@@ -1,1 +1,0 @@
-export { MetaMask } from './connector'

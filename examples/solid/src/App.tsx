@@ -1,37 +1,15 @@
-import { For } from 'solid-js'
+import { QueryClient, QueryClientProvider } from '@tanstack/solid-query'
 import './App.css'
+import QueryComponent from './Query'
 
-import { address, connectors, connectW3, initW3, status } from '@w3vm/solid'
-import { WalletConnect } from '@w3vm/walletconnect'
-import { effect } from 'solid-js/web'
+const queryClient = new QueryClient()
 
-function App() {
-  const projectId = 'YOUR_PROJECT_ID'
-
-  initW3({ 
-    connectors: [
-      new WalletConnect({ 
-        projectId, 
-        chains: [1, 137], 
-        showQrModal: true
-      })
-    ]
-  })
-
-  effect(()=>{
-    console.log(status(), address())
-  })
-  
+function App() {  
   return (
-    <For each={connectors()}>
-      {connector =>(
-      <button disabled={Boolean(status())} onClick={()=>connectW3({ connector })}>
-        <img src={connector.icon} alt={connector.name} />
-        {connector.name}
-      </button>
-      )}
-    </For>
-  )
+    <QueryClientProvider client={queryClient}>
+      <QueryComponent />
+    </QueryClientProvider>
+    )
 }
 
 export default App

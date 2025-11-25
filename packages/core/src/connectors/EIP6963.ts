@@ -1,7 +1,7 @@
-import { setW3 } from '../store/w3store'
 import { EIP6963ProviderDetail } from '../types'
 import { KEY_WALLET } from '../constants'
 import { Injected } from './injected'
+import { w3vmStore } from '../store/w3store'
 
 export class EIP6963Connector extends Injected {
 	readonly uuid: string
@@ -27,11 +27,14 @@ export class EIP6963Connector extends Injected {
 			const connected = await this.setAccountAndChainId(provider)
 			if (connected) {
 				this.addEvents(provider)
-				setW3.walletProvider(provider)
+				w3vmStore.set('connectedWallet', {
+					provider,
+					connectorId: this.id,
+				})
 			} else {
 				window?.localStorage.removeItem(KEY_WALLET)
 			}
-			setW3.status(undefined)
+			w3vmStore.set('status', undefined)
 		}
 	}
 }

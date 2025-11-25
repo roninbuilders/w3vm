@@ -1,52 +1,49 @@
 {
-  "name": "@w3vm/walletconnect",
-  "version": "0.0.9",
-  "description": "WalletConnect connector for W3 EVM library",
-  "author": "Glitch-txs",
-  "license": "MIT",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "watch": "tsc -w",
-    "build": "tsup",
-    "up": "pnpm add @walletconnect/ethereum-provider@latest @walletconnect/modal@latest",
-    "upload": "pnpm run build && pnpm publish",
-    "clean": "rm -rf .turbo && rm -rf dist"
-  },
-  "dependencies": {
-    "@walletconnect/ethereum-provider": "2.18.0",
-    "@walletconnect/modal": "2.7.0"
-  },
-  "peerDependencies": {
-    "@w3vm/core": ">=0",
-    "typescript": ">=5",
-    "vanilla-cafe": ">=0"
-  },
-  "peerDependenciesMeta": {
-    "typescript": {
-      "optional": true
-    }
-  },
-  "keywords": [
-    "wallet",
-    "eth",
-    "ethereum",
-    "walletconnect",
-    "web3"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/w3vm"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "devDependencies": {
-    "@w3vm/core": "workspace:*",
-    "tsup": "^6.7.0"
-  }
+	"name": "@w3vm/walletconnect",
+	"version": "1.0.0",
+	"description": "WalletConnect connector for W3 EVM library",
+	"author": "Glitch-txs",
+	"license": "MIT",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"watch": "tsup --watch",
+		"build": "tsup",
+		"up": "pnpm add @walletconnect/ethereum-provider@latest @walletconnect/modal@latest",
+		"upload": "pnpm run build && pnpm publish",
+		"clean": "rm -rf .turbo && rm -rf dist"
+	},
+	"dependencies": {
+		"@walletconnect/jsonrpc-types": "^1.0.4",
+		"@walletconnect/keyvaluestorage": "^1.1.1",
+		"@walletconnect/types": "^2.20.2",
+		"@walletconnect/universal-provider": "^2.20.2",
+		"@walletconnect/utils": "^2.20.2",
+		"eventemitter3": "^5.0.1",
+		"events": "^3.3.0",
+		"memomap": "^0.0.5"
+	},
+	"peerDependencies": {
+		"@w3vm/core": ">=0",
+		"typescript": ">=5"
+	},
+	"peerDependenciesMeta": {
+		"typescript": {
+			"optional": true
+		}
+	},
+	"keywords": ["wallet", "eth", "ethereum", "walletconnect", "web3"],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/w3vm"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"@w3vm/core": "workspace:*",
+		"tsup": "^6.7.0"
+	}
 }

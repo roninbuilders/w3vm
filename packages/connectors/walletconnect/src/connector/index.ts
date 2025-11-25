@@ -1,21 +1,16 @@
-import EthereumProvider, {
-	type EthereumProviderOptions,
-} from '@walletconnect/ethereum-provider/dist/types/EthereumProvider'
 import {
 	Chain,
 	Injected,
 	Provider,
 	_clearW3 as clearW3,
-	setW3,
+	w3vmStore,
 	_KEY_WALLET as KEY_WALLET,
 	_catchError as catchError,
-	getW3,
 } from '@w3vm/core'
-import { setWC } from '../store'
+import { wcStore } from '../store'
+import EthereumProvider, { EthereumProviderOptions } from '../provider'
 
 type WalletConnectOptions = {
-	showQrModal?: boolean
-	qrModalOptions?: EthereumProviderOptions['qrModalOptions']
 	metadata?: EthereumProviderOptions['metadata']
 	icon?: any
 	projectId: string
@@ -45,21 +40,17 @@ export class WalletConnect extends Injected {
 	}
 
 	async init() {
-		const { EthereumProvider } = await import('@walletconnect/ethereum-provider')
-
-		const { showQrModal, qrModalOptions, projectId, chains: optionalChains, metadata } = this.options
+		const { projectId, chains: optionalChains, metadata } = this.options
 
 		//@ts-ignore - strict type on chains vs optionalChains
 		const provider = await EthereumProvider.init({
 			projectId,
 			metadata,
 			optionalChains,
-			showQrModal: showQrModal ?? false,
-			qrModalOptions,
 		}).catch(catchError)
 
 		if (!provider) {
-			setW3.status(undefined)
+			w3vmStore.set('status', undefined)
 			throw new Error('Failed to initialize WalletConnect')
 		}
 
@@ -70,18 +61,32 @@ export class WalletConnect extends Injected {
 		})
 
 		function onUri(uri: string) {
-			if (uri) setW3.status('Connecting')
-			setWC.uri(uri)
+			if (uri) w3vmStore.set('status', 'Connecting')
+			wcStore.set('uri', uri)
 		}
+
+		function onSessionEvent(event: unknown) {
+			wcStore.set('sessionEvent', event)
+		}
+
+		/**clean up before subscribing... */
+		provider.off('display_uri', onUri)
+		provider.off('session_event', onSessionEvent)
+		this.removeEvents(provider as Provider)
+
 		provider.on('display_uri', onUri)
-		provider.on('session_event', setWC.sessionEvent)
+		provider.on('session_event', onSessionEvent)
 		this.addEvents(provider as Provider)
 
 		if (provider.session) {
 			const connected = await this.setAccountAndChainId(provider as Provider)
 			if (connected) {
 				if (localStorage.getItem(KEY_WALLET) !== this.id) localStorage.setItem(KEY_WALLET, this.id)
-				setW3.walletProvider(provider as Provider), setW3.status(undefined)
+				w3vmStore.set('connectedWallet', {
+					provider: provider as Provider,
+					connectorId: this.id,
+				}),
+					w3vmStore.set('status', undefined)
 				return
 			}
 		}
@@ -108,20 +113,25 @@ export class WalletConnect extends Injected {
 			else optionalChains = [Number(_chain?.chainId), ...optionalChains]
 		}
 
-		await (provider as EthereumProvider).connect?.({ optionalChains }).catch(catchError)
+		await (provider as Awaited<ReturnType<(typeof EthereumProvider)['init']>>)
+			.connect?.({ optionalChains })
+			.catch(catchError)
 
 		const connected = await this.setAccountAndChainId(this.provider)
 		if (connected) {
-			setW3.walletProvider(provider as Provider)
+			w3vmStore.set('connectedWallet', {
+				provider,
+				connectorId: this.id,
+			})
 			localStorage.setItem(KEY_WALLET, this.id)
 			this.addEvents(provider as Provider)
 		}
 
-		setW3.status(undefined)
+		w3vmStore.set('status', undefined)
 	}
 
 	async disconnect() {
-		setW3.status('Disconnecting')
+		w3vmStore.set('status', 'Disconnecting')
 		const provider = await this.getProvider()
 		await provider?.disconnect?.()
 		clearW3()
@@ -139,15 +149,15 @@ export class WalletConnect extends Injected {
 
 	protected onAccountChange = (accounts: string[]) => {
 		if (typeof accounts[0] !== 'undefined') {
-			setW3.address(accounts[0])
+			w3vmStore.set('address', accounts[0])
 		} else {
-			const walletProvider = getW3.walletProvider()
+			const walletProvider = w3vmStore.get('connectedWallet')?.provider as Provider
 			if (walletProvider) this.removeEvents(walletProvider)
 			clearW3()
 		}
 	}
 
 	protected onChainChange = (chainId: string | number) => {
-		setW3.chainId(Number(chainId))
+		w3vmStore.set('chainId', Number(chainId))
 	}
 }

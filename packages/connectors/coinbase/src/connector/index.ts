@@ -1,11 +1,8 @@
-import { Injected, Provider, _clearW3 as clearW3, setW3, _KEY_WALLET as KEY_WALLET } from '@w3vm/core'
+import { Injected, Provider, _clearW3 as clearW3, w3vmStore, _KEY_WALLET as KEY_WALLET } from '@w3vm/core'
 
 type CoinbaseOptions = {
 	appName: string
 	appLogoUrl?: string
-	darkMode?: boolean
-	defaultChainId?: number
-	defaultJsonRpcUrl?: string
 	icon?: any
 }
 
@@ -17,7 +14,7 @@ export class Coinbase extends Injected {
 	getProvider: () => Promise<Provider> | Provider | undefined
 
 	constructor(options: CoinbaseOptions) {
-		const { appName, appLogoUrl, darkMode, defaultChainId, defaultJsonRpcUrl, icon } = options
+		const { appName, appLogoUrl, icon } = options
 
 		const getProvider = async () => {
 			if (typeof window === 'undefined') return
@@ -34,10 +31,9 @@ export class Coinbase extends Injected {
 			const coinbaseWallet = new CoinbaseWalletSDK({
 				appName,
 				appLogoUrl,
-				darkMode,
 			})
 
-			this.provider = coinbaseWallet.makeWeb3Provider(defaultJsonRpcUrl, defaultChainId)
+			this.provider = coinbaseWallet.makeWeb3Provider() as Provider
 			return this.provider
 		}
 
@@ -51,7 +47,7 @@ export class Coinbase extends Injected {
 	}
 
 	async disconnect(): Promise<void> {
-		setW3.status('Disconnecting')
+		w3vmStore.set('status', 'Disconnecting')
 		const provider = await this.getProvider()
 		if (provider) this.removeEvents(provider)
 		//@ts-ignore coinbase provider adds disconnect function

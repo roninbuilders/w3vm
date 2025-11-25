@@ -9,9 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@w3vm/core": "workspace:*",
-    "@w3vm/solid": "workspace:*",
-    "@w3vm/walletconnect": "workspace:*",
+    "@tanstack/solid-query": "^5.77.2",
     "solid-js": "^1.8.7"
   },
   "devDependencies": {
